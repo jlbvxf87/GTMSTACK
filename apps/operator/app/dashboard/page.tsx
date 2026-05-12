@@ -28,7 +28,7 @@ export default async function Dashboard() {
           { label: "Brand", href: "/dashboard/brand" },
           { label: "Payouts", href: "/dashboard/settings/payouts" },
         ]}
-        cta={{ label: "View storefront", href: `https://${storefrontUrl}` }}
+        cta={{ label: "Preview storefront", href: "/dashboard/preview" }}
       />
 
       <main className="w-full bg-background text-foreground">

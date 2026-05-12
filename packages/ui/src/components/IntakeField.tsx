@@ -50,8 +50,12 @@ export function IntakeField({
   const errorId = `${inputId}-error`;
   const describedBy = error ? errorId : helperText ? helperId : undefined;
 
-  const shared =
-    "w-full rounded-button border-card bg-background px-4 py-3 font-body text-body text-foreground placeholder:text-muted-foreground/60 transition-colors duration-DEFAULT ease-themed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  // Multi-line uses the card radius (works at any size); single-line uses a
+  // moderate radius that looks good across all themes. The button radius
+  // (999px in wellness, square in clinical/community) is wrong for inputs —
+  // it visually clips text content in pill-shaped multi-line fields.
+  const radiusClass = multiline ? "rounded-card" : "rounded-md";
+  const shared = `w-full ${radiusClass} border-card bg-background px-4 py-3 font-body text-body text-foreground placeholder:text-muted-foreground/60 transition-colors duration-DEFAULT ease-themed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background`;
   const borderClass = error ? "border-destructive" : "border-border focus-visible:border-brand";
 
   return (
