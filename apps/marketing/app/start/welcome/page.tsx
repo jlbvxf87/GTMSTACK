@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { IntakeShell, primeWellness, findProductBySlug } from "@gtmstack/ui";
+import { IntakeShell, SiteHeader, SiteFooter, primeWellness, findProductBySlug } from "@gtmstack/ui";
 
 import { resetIntake } from "../actions";
 import { INTAKE_STEPS, completedKeys, readIntakeState } from "../state";
@@ -99,6 +99,11 @@ export default async function WelcomeStep({
   );
 }
 
+/**
+ * Direct-checkout confirmation — user came here via /api/checkout, not via
+ * the intake form. Render plain SiteHeader + a confirmation card; intentionally
+ * no intake stepper because the user never went through those steps.
+ */
 function CheckoutConfirmation({
   sessionId,
   slug,
@@ -108,43 +113,61 @@ function CheckoutConfirmation({
 }) {
   const match = slug ? findProductBySlug(slug) : null;
   const product = match?.product;
-  const brand = match?.brand ?? null;
+  const brand = match?.brand ?? primeWellness;
 
   return (
-    <IntakeShell
-      brandName={brand?.name ?? primeWellness.name}
-      steps={INTAKE_STEPS}
-      currentStep="review"
-      completedSteps={["goals", "health", "preferences", "account", "review"]}
-      eyebrow="Order confirmed"
-      headline="You're in. Welcome aboard."
-      subhead={
-        product
-          ? `Your ${product.name} ${product.price.subscription ? "subscription" : "order"} is active. First shipment in 48 hours.`
-          : "Your order is active. First shipment in 48 hours."
-      }
-    >
-      <div className="flex flex-col gap-12">
-        <div className="rounded-card border-card border-border bg-muted p-6">
-          <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-            Stripe session
-          </p>
-          <p className="mt-stack font-display text-h3 text-foreground break-all">{sessionId}</p>
-          <p className="mt-stack text-body text-muted-foreground">
-            A receipt is on the way. Manage your subscription anytime from the member dashboard.
-          </p>
-        </div>
+    <>
+      <SiteHeader brandName={brand.name} links={brand.nav} cta={brand.navCta} />
 
-        <div className="flex flex-wrap items-center gap-inline">
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-button bg-brand px-[var(--px-button)] py-[var(--py-button)] font-body font-[var(--weight-button)] text-brand-foreground transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-[1.05]"
-          >
-            Back to programs
-          </a>
+      <main className="w-full bg-background text-foreground">
+        <div className="mx-auto max-w-3xl px-6 py-section md:px-10">
+          <p className="font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
+            Order confirmed
+          </p>
+          <h1 className="mt-stack font-display text-h1 text-foreground">
+            You're in. Welcome aboard.
+          </h1>
+          <p className="mt-stack max-w-prose text-h3 text-muted-foreground">
+            {product
+              ? `Your ${product.name} ${product.price.subscription ? "subscription" : "order"} is active. First shipment in 48 hours.`
+              : "Your order is active. First shipment in 48 hours."}
+          </p>
+
+          <div className="mt-12 rounded-card border-card border-border bg-muted p-6">
+            <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
+              Stripe session
+            </p>
+            <p className="mt-stack font-display text-h3 text-foreground break-all">{sessionId}</p>
+            <p className="mt-stack text-body text-muted-foreground">
+              A receipt is on the way. Manage your subscription anytime from the member dashboard.
+            </p>
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-center gap-inline">
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-button bg-brand px-[var(--px-button)] py-[var(--py-button)] font-body font-[var(--weight-button)] text-brand-foreground transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-[1.05]"
+            >
+              Back to programs
+            </a>
+            <a
+              href={product ? `/products/${product.slug}` : "/"}
+              className="inline-flex items-center justify-center rounded-button border border-border bg-transparent px-[var(--px-button)] py-[var(--py-button)] font-body text-foreground transition-colors duration-DEFAULT ease-themed hover:bg-muted"
+            >
+              View product
+            </a>
+          </div>
         </div>
-      </div>
-    </IntakeShell>
+      </main>
+
+      <SiteFooter
+        brandName={brand.name}
+        tagline={brand.tagline}
+        linkGroups={brand.footerGroups}
+        legalLinks={brand.footerLegal}
+        disclaimer={brand.footerDisclaimer}
+      />
+    </>
   );
 }
 
