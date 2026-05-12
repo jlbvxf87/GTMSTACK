@@ -1,3 +1,11 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Lifecycle scripts approval (pnpm 11+). Disable scripts we don't need —
+# esbuild postinstall just version-validates a binary we already have, core-js
+# is a donation message, protobufjs builds proto descriptors we don't use.
+allowBuilds:
+  core-js: false
+  esbuild: false
+  protobufjs: false
