@@ -1,36 +1,32 @@
 import { ProductCard } from "./ProductCard";
 import type { Product } from "./types";
 
-export type FeatureGridProps = {
-  /** Section eyebrow above the headline. */
+export type RelatedProductsProps = {
   eyebrow?: string;
   headline: string;
-  /** Optional supporting paragraph below the headline. */
-  subhead?: string;
   products: Product[];
 };
 
 /**
- * FeatureGrid — the canonical product / program grid. Server component.
+ * RelatedProducts — cross-sell strip below the product page. Server component.
  *
- * Visual differentiation across themes happens entirely through token-driven
- * classes (`rounded-card`, `border-card`, `shadow-card`, etc.). Card rendering
- * is delegated to `<ProductCard>` so cross-sell surfaces stay consistent.
+ * Visually a tighter, less-emphasized version of `FeatureGrid`. Reuses `ProductCard`
+ * so cross-sell stays consistent with the catalog grid. Operators / route handlers
+ * resolve `product.relatedSlugs` to `Product[]` before passing to this component.
  */
-export function FeatureGrid({ eyebrow, headline, subhead, products }: FeatureGridProps) {
+export function RelatedProducts({ eyebrow, headline, products }: RelatedProductsProps) {
+  if (products.length === 0) return null;
+
   return (
-    <section className="w-full bg-background text-foreground">
+    <section className="w-full bg-muted text-foreground">
       <div className="mx-auto max-w-container px-6 py-section md:px-10">
-        <header className="mb-12 max-w-3xl">
+        <header className="mb-12">
           {eyebrow ? (
             <p className="mb-stack font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
               {eyebrow}
             </p>
           ) : null}
           <h2 className="font-display text-h1 text-foreground">{headline}</h2>
-          {subhead ? (
-            <p className="mt-stack text-h3 text-muted-foreground">{subhead}</p>
-          ) : null}
         </header>
 
         <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

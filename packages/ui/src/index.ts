@@ -11,5 +11,6 @@ export {
   apexRx,
   ironReserve,
   demoBrands,
+  findProductBySlug,
 } from "./components/__fixtures__/demo-brands";
 export type { DemoBrand } from "./components/__fixtures__/demo-brands";

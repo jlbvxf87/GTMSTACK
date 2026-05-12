@@ -2,9 +2,16 @@
  * Demo brand fixtures for Storybook and dev. NOT a runtime data source.
  *
  * Each fixture matches one of the three theme families so stories can render
- * <SiteHeader>, <BrandHero>, <FeatureGrid>, <SiteFooter> with brand-appropriate
- * content per theme. The wellness fixture is Prime Wellness — the canonical
- * demo brand referenced throughout product and marketing per docs/CLAUDE.md.
+ * the universal section library with brand-appropriate content per theme.
+ * The wellness fixture is Prime Wellness — the canonical demo brand
+ * referenced throughout product and marketing per docs/CLAUDE.md.
+ *
+ * One product per brand carries the full product-page content (gallery,
+ * detail sections, ingredients, reviews) so Sprint 3 storefront pages have
+ * something real to render in each theme:
+ *   - wellness  → Sleep Stack
+ *   - clinical  → Peptide Performance
+ *   - community → Whey Foundation
  */
 
 import type {
@@ -90,6 +97,7 @@ export const primeWellness: DemoBrand = {
   products: [
     {
       id: "daily-greens",
+      slug: "daily-greens",
       name: "Daily Greens",
       eyebrow: "Daily foundation",
       description:
@@ -98,19 +106,123 @@ export const primeWellness: DemoBrand = {
         oneTime: { amount: 4900, currency: "USD" },
         subscription: { monthly: { amount: 3900, currency: "USD" }, savingsPct: 20 },
       },
-      ctaHref: "#daily-greens",
+      ctaHref: "/products/daily-greens",
     },
     {
       id: "sleep-stack",
+      slug: "sleep-stack",
       name: "Sleep Stack",
       eyebrow: "Recovery evenings",
       description:
         "Glycine, l-theanine, and magnesium threonate for nights that actually restore. Coach check-ins included.",
-      price: { subscription: { monthly: { amount: 7900, currency: "USD" } } },
-      ctaHref: "#sleep-stack",
+      price: {
+        oneTime: { amount: 9900, currency: "USD" },
+        subscription: { monthly: { amount: 7900, currency: "USD" }, savingsPct: 20 },
+      },
+      ctaHref: "/products/sleep-stack",
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1556228724-4d6c0c66bba8?auto=format&fit=crop&w=1200&q=80",
+          alt: "Sleep Stack bottle on a calm bedside table",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1611259859321-4dbc89b1c2d4?auto=format&fit=crop&w=600&q=80",
+          alt: "Capsules in a soft beam of light",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&w=600&q=80",
+          alt: "Linen bedding closeup",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1617886322168-72b886573c5f?auto=format&fit=crop&w=600&q=80",
+          alt: "Member journaling in the evening",
+        },
+      ],
+      longDescription:
+        "A clinically-dosed evening stack designed to deepen recovery sleep — without next-day sluggishness. Built with magnesium L-threonate for cognitive recovery, glycine for sleep architecture, and l-theanine to calm sympathetic tone before bed.",
+      detailSections: [
+        {
+          id: "how-it-works",
+          title: "How it works",
+          body: "Three actives work on three different mechanisms of evening recovery. Magnesium L-threonate crosses the blood–brain barrier and supports synaptic recovery. Glycine has been shown to improve subjective and objective sleep quality. L-theanine reduces sympathetic activation so you fall asleep without sedation. Take one serving 30 minutes before bed for two weeks; most members notice a difference inside week one.",
+        },
+        {
+          id: "what-its-not",
+          title: "What it's not",
+          body: "Sleep Stack does not contain melatonin, prescription sedatives, or downstream sleep aids. It is not designed to override poor sleep habits or to mask a clinical sleep disorder. If symptoms persist longer than four weeks, escalate to a provider for evaluation.",
+        },
+        {
+          id: "for-whom",
+          title: "Who it's for",
+          body: "Adults who fall asleep fine but wake at 3 a.m., athletes whose training is outpacing their recovery, and anyone whose smartwatch reports sleep efficiency under 85% on most nights.",
+        },
+      ],
+      ingredients: [
+        {
+          id: "magtheonate",
+          name: "Magnesium L-threonate",
+          source: "Magtein®",
+          dose: "2,000 mg",
+          role: "Crosses the blood–brain barrier to support synaptic recovery and cognitive resilience.",
+        },
+        {
+          id: "glycine",
+          name: "Glycine",
+          dose: "3 g",
+          role: "Improves subjective and objective sleep quality; non-habit-forming.",
+        },
+        {
+          id: "ltheanine",
+          name: "L-Theanine",
+          source: "Suntheanine®",
+          dose: "200 mg",
+          role: "Reduces evening sympathetic activation without sedation.",
+        },
+        {
+          id: "apigenin",
+          name: "Apigenin",
+          dose: "50 mg",
+          role: "Supports a calmer nervous system before bed.",
+        },
+      ],
+      averageRating: 4.8,
+      reviewCount: 234,
+      reviews: [
+        {
+          id: "r1",
+          rating: 5,
+          headline: "Sleeping through the night for the first time in years",
+          quote:
+            "I've tried magnesium glycinate, melatonin, even prescription sleep aids. Sleep Stack is the first thing where I'm not awake at 3 a.m. doing math on tomorrow. Took maybe four nights to notice.",
+          attribution: "Maya R.",
+          attributionDetail: "Member since 2024 · Sleep Stack",
+          verified: true,
+        },
+        {
+          id: "r2",
+          rating: 5,
+          headline: "Wake up actually rested",
+          quote:
+            "My HRV is up about 12 points on weeks I take it consistently. No grogginess. The coach check-in helped me find the right dose timing.",
+          attribution: "Daniel K.",
+          attributionDetail: "Member since 2024",
+          verified: true,
+        },
+        {
+          id: "r3",
+          rating: 4,
+          quote:
+            "Took about two weeks to feel any difference, but once it kicked in, the change was real. Wish it shipped faster, otherwise no complaints.",
+          attribution: "Priya S.",
+          attributionDetail: "Member since 2025",
+          verified: true,
+        },
+      ],
+      relatedSlugs: ["daily-greens", "recovery-kit"],
     },
     {
       id: "recovery-kit",
+      slug: "recovery-kit",
       name: "Recovery Kit",
       eyebrow: "Training-day support",
       description:
@@ -119,13 +231,14 @@ export const primeWellness: DemoBrand = {
         oneTime: { amount: 12900, currency: "USD" },
         subscription: { monthly: { amount: 9900, currency: "USD" } },
       },
-      ctaHref: "#recovery-kit",
+      ctaHref: "/products/recovery-kit",
     },
   ],
   programSection: {
     eyebrow: "How it works",
     headline: "From baseline to better in four weeks.",
-    subhead: "Same simple flow whether you start with one stack or three. Every step is reviewable in your dashboard.",
+    subhead:
+      "Same simple flow whether you start with one stack or three. Every step is reviewable in your dashboard.",
     steps: [
       {
         id: "1",
@@ -174,14 +287,16 @@ export const primeWellness: DemoBrand = {
       },
       {
         id: "s2",
-        quote: "Customer support escalates to a real clinician when I have a question. That alone is worth it.",
+        quote:
+          "Customer support escalates to a real clinician when I have a question. That alone is worth it.",
         attribution: "Priya S.",
         attributionDetail: "Recovery Kit",
         rating: 5,
       },
       {
         id: "s3",
-        quote: "It feels like a real practice, not a supplement company. The packaging just happens to be beautiful too.",
+        quote:
+          "It feels like a real practice, not a supplement company. The packaging just happens to be beautiful too.",
         attribution: "Jordan T.",
         attributionDetail: "Sleep Stack",
         rating: 5,
@@ -191,7 +306,8 @@ export const primeWellness: DemoBrand = {
   faqSection: {
     eyebrow: "Common questions",
     headline: "Everything new members ask in week one.",
-    subhead: "Don't see your question? Coach support replies inside an hour during business hours.",
+    subhead:
+      "Don't see your question? Coach support replies inside an hour during business hours.",
     items: [
       {
         id: "q1",
@@ -229,9 +345,9 @@ export const primeWellness: DemoBrand = {
     {
       heading: "Programs",
       links: [
-        { label: "Daily Greens", href: "#daily-greens" },
-        { label: "Sleep Stack", href: "#sleep-stack" },
-        { label: "Recovery Kit", href: "#recovery-kit" },
+        { label: "Daily Greens", href: "/products/daily-greens" },
+        { label: "Sleep Stack", href: "/products/sleep-stack" },
+        { label: "Recovery Kit", href: "/products/recovery-kit" },
         { label: "Performance Stack", href: "#performance" },
       ],
     },
@@ -292,36 +408,123 @@ export const apexRx: DemoBrand = {
   products: [
     {
       id: "hrt-baseline",
+      slug: "hormone-baseline",
       name: "Hormone Baseline",
       eyebrow: "Provider-supervised",
       description:
         "At-home labs + telehealth provider review + monthly fulfillment of an individualized hormone protocol.",
       price: { subscription: { monthly: { amount: 24900, currency: "USD" } } },
-      ctaHref: "#hrt",
+      ctaHref: "/products/hormone-baseline",
     },
     {
       id: "peptide-stack",
+      slug: "peptide-performance",
       name: "Peptide Performance",
       eyebrow: "Recovery + performance",
       description:
         "BPC-157, TB-500, and supporting peptides fulfilled by 503A compounding pharmacy partners.",
       price: { subscription: { monthly: { amount: 39900, currency: "USD" } } },
-      ctaHref: "#peptides",
+      ctaHref: "/products/peptide-performance",
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
+          alt: "Sterile vials on a clinical lab surface",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1582719188393-bb71ca45dbb9?auto=format&fit=crop&w=600&q=80",
+          alt: "Medical chart with hand-drawn dosing",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=600&q=80",
+          alt: "Provider in a telehealth visit",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1554475901-4538ddfbccc2?auto=format&fit=crop&w=600&q=80",
+          alt: "Athlete returning to training",
+        },
+      ],
+      longDescription:
+        "A provider-supervised peptide protocol for accelerated recovery, soft-tissue repair, and performance under high training load. Compounded at 503A pharmacy partners under prescription, shipped on cold-chain where required.",
+      detailSections: [
+        {
+          id: "protocol",
+          title: "The protocol",
+          body: "After your labs and provider visit, a 12-week sequence begins with BPC-157 + TB-500 stacked for soft-tissue and tendon recovery, then transitions to a maintenance cadence based on outcomes. Provider adjusts dose every four weeks.",
+        },
+        {
+          id: "supervision",
+          title: "Who supervises this",
+          body: "An independent licensed physician in your state holds the prescriptive relationship. ApexRX coordinates the visit, follow-ups, fulfillment logistics, and member experience. The provider — not ApexRX — owns clinical decisions.",
+        },
+        {
+          id: "compliance",
+          title: "Compliance & sourcing",
+          body: "Compounded medications are produced at a 503A pharmacy partner licensed in your state. We disclose the pharmacy partner on your protocol page before fulfillment. Lot numbers and certificates of analysis are available in your member portal.",
+        },
+      ],
+      ingredients: [
+        {
+          id: "bpc157",
+          name: "BPC-157",
+          dose: "250 mcg / day",
+          role: "Body Protection Compound; supports gut, soft tissue, and tendon recovery.",
+          source: "Compounded · 503A partner",
+        },
+        {
+          id: "tb500",
+          name: "TB-500 (Thymosin β-4 fragment)",
+          dose: "2.5 mg / week",
+          role: "Supports systemic recovery and tissue repair at injury sites.",
+          source: "Compounded · 503A partner",
+        },
+        {
+          id: "ipa",
+          name: "Ipamorelin",
+          dose: "200 mcg before bed",
+          role: "Modulates endogenous GH pulses; supports recovery sleep architecture.",
+          source: "Compounded · 503A partner",
+        },
+      ],
+      averageRating: 4.9,
+      reviewCount: 87,
+      reviews: [
+        {
+          id: "r1",
+          rating: 5,
+          headline: "Recovery from chronic Achilles issue",
+          quote:
+            "I'd been dealing with a left Achilles inflammation for six months. Twelve weeks on this protocol and I'm back to lifting at 90%. The provider was responsive and adjusted me mid-protocol when it plateaued.",
+          attribution: "Andrew L.",
+          attributionDetail: "Member · Hormone Baseline + Peptide Performance",
+          verified: true,
+        },
+        {
+          id: "r2",
+          rating: 5,
+          quote:
+            "What I expected from a $399/month protocol: bottles in the mail. What I got: a real clinical relationship and a dashboard that tracks my outcomes. Worth it.",
+          attribution: "Member, 47",
+          verified: true,
+        },
+      ],
+      relatedSlugs: ["hormone-baseline", "longevity-panel"],
     },
     {
       id: "longevity",
+      slug: "longevity-panel",
       name: "Longevity Panel",
       eyebrow: "Quarterly diagnostics",
       description:
         "Quarterly comprehensive labs (40+ biomarkers) and a 30-min provider readout.",
       price: { subscription: { monthly: { amount: 14900, currency: "USD" } } },
-      ctaHref: "#longevity",
+      ctaHref: "/products/longevity-panel",
     },
   ],
   programSection: {
     eyebrow: "Protocol design",
     headline: "Every protocol starts with data.",
-    subhead: "Labs first. Provider review second. Adjust monthly based on what your numbers show.",
+    subhead:
+      "Labs first. Provider review second. Adjust monthly based on what your numbers show.",
     steps: [
       {
         id: "1",
@@ -369,13 +572,15 @@ export const apexRx: DemoBrand = {
       },
       {
         id: "s2",
-        quote: "Real labs, real provider, real adjustments. Not a wellness brand pretending to be a clinic.",
+        quote:
+          "Real labs, real provider, real adjustments. Not a wellness brand pretending to be a clinic.",
         attribution: "Member, 52",
         attributionDetail: "Hormone Baseline",
       },
       {
         id: "s3",
-        quote: "Saw measurable changes inside two cycles. The dashboard is what I always wanted from a clinic.",
+        quote:
+          "Saw measurable changes inside two cycles. The dashboard is what I always wanted from a clinic.",
         attribution: "Member, 44",
         attributionDetail: "Longevity Panel",
       },
@@ -384,7 +589,8 @@ export const apexRx: DemoBrand = {
   faqSection: {
     eyebrow: "Common questions",
     headline: "How the protocol works, end to end.",
-    subhead: "Clinical questions route directly to your provider. Logistics questions to our member team.",
+    subhead:
+      "Clinical questions route directly to your provider. Logistics questions to our member team.",
     items: [
       {
         id: "q1",
@@ -422,9 +628,9 @@ export const apexRx: DemoBrand = {
     {
       heading: "Protocols",
       links: [
-        { label: "Hormone Baseline", href: "#hrt" },
-        { label: "Peptide Performance", href: "#peptides" },
-        { label: "Longevity Panel", href: "#longevity" },
+        { label: "Hormone Baseline", href: "/products/hormone-baseline" },
+        { label: "Peptide Performance", href: "/products/peptide-performance" },
+        { label: "Longevity Panel", href: "/products/longevity-panel" },
       ],
     },
     {
@@ -479,6 +685,7 @@ export const ironReserve: DemoBrand = {
   products: [
     {
       id: "preworkout",
+      slug: "pre-lift",
       name: "Pre-Lift",
       eyebrow: "Train",
       description: "Citrulline, beta-alanine, caffeine. Clean panel, transparent dosing.",
@@ -486,23 +693,125 @@ export const ironReserve: DemoBrand = {
         oneTime: { amount: 4900, currency: "USD" },
         subscription: { monthly: { amount: 3900, currency: "USD" } },
       },
-      ctaHref: "#pre",
+      ctaHref: "/products/pre-lift",
     },
     {
       id: "whey",
+      slug: "whey-foundation",
       name: "Whey Foundation",
       eyebrow: "Build",
       description: "Grass-fed isolate, 27g per scoop, no artificial sweeteners.",
-      price: { subscription: { monthly: { amount: 5900, currency: "USD" } } },
-      ctaHref: "#whey",
+      price: {
+        oneTime: { amount: 7900, currency: "USD" },
+        subscription: { monthly: { amount: 5900, currency: "USD" }, savingsPct: 25 },
+      },
+      ctaHref: "/products/whey-foundation",
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?auto=format&fit=crop&w=1200&q=80",
+          alt: "Athlete mixing protein in the gym",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=600&q=80",
+          alt: "Tub of whey foundation",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80",
+          alt: "Squat rack closeup",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80",
+          alt: "Crew workout in progress",
+        },
+      ],
+      longDescription:
+        "Honest whey isolate. 27g of protein per scoop, sourced from grass-fed dairy, sweetened with monk fruit, mixed clean every time. The panel is the panel — no proprietary blends, no underdosed actives, no flavoring chemicals you can't pronounce.",
+      detailSections: [
+        {
+          id: "panel",
+          title: "What's actually in it",
+          body: "Whey protein isolate (grass-fed), natural cocoa or vanilla, monk fruit extract, sea salt, sunflower lecithin. That's it. The certificate of analysis is on the product page within five days of every batch release.",
+        },
+        {
+          id: "how-we-use-it",
+          title: "How the crew uses it",
+          body: "Two scoops post-training, one scoop in the morning oatmeal, or one scoop blended with banana + almond butter as a between-meals lever. Mixes in water, not just milk. Subscribers get the optional monthly programming PDF.",
+        },
+        {
+          id: "tested",
+          title: "Third-party tested. Every batch.",
+          body: "Every production lot is third-party tested for purity, label accuracy, and heavy metals. Results live on each product page. Underdosing or sneaking in cheap fillers is the fastest way to lose this customer; we don't do either.",
+        },
+      ],
+      ingredients: [
+        {
+          id: "whey-isolate",
+          name: "Whey Protein Isolate",
+          source: "Grass-fed New Zealand sourced",
+          dose: "27 g",
+          role: "Complete protein, high BCAA fraction, low lactose.",
+        },
+        {
+          id: "monk-fruit",
+          name: "Monk Fruit Extract",
+          dose: "60 mg",
+          role: "Natural sweetener — no sucralose, no aspartame.",
+        },
+        {
+          id: "lecithin",
+          name: "Sunflower Lecithin",
+          dose: "200 mg",
+          role: "Improves mixability and texture without seed-oil solvents.",
+        },
+        {
+          id: "salt",
+          name: "Sea Salt",
+          dose: "100 mg",
+          role: "Balances flavor; matters more than people think.",
+        },
+      ],
+      averageRating: 4.7,
+      reviewCount: 412,
+      reviews: [
+        {
+          id: "r1",
+          rating: 5,
+          headline: "Mixes clean, tastes like food",
+          quote:
+            "I've used twelve different whey brands. This one mixes in water with a spoon, no blender, no clumps. Tastes like an actual food product, not a candy bar.",
+          attribution: "Marcus H.",
+          attributionDetail: "Powerlifter · subscribed since 2023",
+          verified: true,
+        },
+        {
+          id: "r2",
+          rating: 5,
+          quote:
+            "Third-party tested COA on every batch is what got me to switch. Iron Reserve was the first brand that just published it without me having to ask.",
+          attribution: "Trey W.",
+          attributionDetail: "Marathon",
+          verified: true,
+        },
+        {
+          id: "r3",
+          rating: 4,
+          quote:
+            "Only complaint: the vanilla could be a touch sweeter. Otherwise this is just the cleanest whey I've found.",
+          attribution: "Sienna M.",
+          attributionDetail: "Crossfit",
+          verified: true,
+        },
+      ],
+      relatedSlugs: ["pre-lift", "post-recovery"],
     },
     {
       id: "recovery",
+      slug: "post-recovery",
       name: "Post Recovery",
       eyebrow: "Repair",
       description: "Creatine + electrolytes + tart cherry. The bottle on every gym bag.",
       price: { subscription: { monthly: { amount: 4900, currency: "USD" } } },
-      ctaHref: "#post",
+      ctaHref: "/products/post-recovery",
     },
   ],
   programSection: {
@@ -557,7 +866,8 @@ export const ironReserve: DemoBrand = {
       },
       {
         id: "s2",
-        quote: "Third-party testing on every batch is non-negotiable for me. Iron Reserve was the first brand that just published it.",
+        quote:
+          "Third-party testing on every batch is non-negotiable for me. Iron Reserve was the first brand that just published it.",
         attribution: "Trey W.",
         attributionDetail: "Marathon",
         rating: 5,
@@ -611,9 +921,9 @@ export const ironReserve: DemoBrand = {
     {
       heading: "Stack",
       links: [
-        { label: "Pre-Lift", href: "#pre" },
-        { label: "Whey Foundation", href: "#whey" },
-        { label: "Post Recovery", href: "#post" },
+        { label: "Pre-Lift", href: "/products/pre-lift" },
+        { label: "Whey Foundation", href: "/products/whey-foundation" },
+        { label: "Post Recovery", href: "/products/post-recovery" },
       ],
     },
     {
@@ -645,3 +955,19 @@ export const demoBrands = {
   wellness: primeWellness,
   community: ironReserve,
 } as const;
+
+/**
+ * Resolve a product by slug across all three demo brands. Helper for the
+ * /products/[slug] route during Sprint 3 (before apps/storefront wires real
+ * tenants). Returns the matching `Product` and its parent `DemoBrand`, or null.
+ */
+export function findProductBySlug(slug: string): {
+  product: Product;
+  brand: DemoBrand;
+} | null {
+  for (const brand of [primeWellness, apexRx, ironReserve]) {
+    const product = brand.products.find((p) => p.slug === slug);
+    if (product) return { product, brand };
+  }
+  return null;
+}
