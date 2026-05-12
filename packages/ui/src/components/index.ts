@@ -37,6 +37,21 @@ export type { ProductReviewsProps } from "./ProductReviews";
 export { RelatedProducts } from "./RelatedProducts";
 export type { RelatedProductsProps } from "./RelatedProducts";
 
+export { IntakeStepper } from "./IntakeStepper";
+export type { IntakeStepperProps } from "./IntakeStepper";
+
+export { IntakeShell } from "./IntakeShell";
+export type { IntakeShellProps } from "./IntakeShell";
+
+export { IntakeField } from "./IntakeField";
+export type { IntakeFieldProps } from "./IntakeField";
+
+export { IntakeChoiceGroup } from "./IntakeChoiceGroup";
+export type { IntakeChoiceGroupProps } from "./IntakeChoiceGroup";
+
+export { IntakeReviewSummary } from "./IntakeReviewSummary";
+export type { IntakeReviewSummaryProps } from "./IntakeReviewSummary";
+
 export type {
   Money,
   Price,
@@ -50,4 +65,9 @@ export type {
   Testimonial,
   FAQItem,
   ProgramStep,
+  IntakeStepKey,
+  IntakeStep,
+  IntakeChoice,
+  IntakeReviewField,
+  IntakeReviewSection,
 } from "./types";

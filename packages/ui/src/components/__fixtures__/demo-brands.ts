@@ -91,8 +91,8 @@ export const primeWellness: DemoBrand = {
     { label: "Science", href: "#science" },
     { label: "Stories", href: "#stories" },
   ],
-  navCta: { label: "Start Your Program", href: "#start" },
-  primaryCta: { label: "Start Your Program", href: "#start" },
+  navCta: { label: "Start Your Program", href: "/start" },
+  primaryCta: { label: "Start Your Program", href: "/start" },
   secondaryCta: { label: "How it works", href: "#how" },
   products: [
     {

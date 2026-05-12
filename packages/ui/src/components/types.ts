@@ -132,3 +132,42 @@ export type ProgramStep = {
   title: string;
   body: string;
 };
+
+// ---------------------------------------------------------------------------
+// Intake flow (Sprint 4)
+// ---------------------------------------------------------------------------
+
+/** Stepper / route keys for the five intake steps. */
+export type IntakeStepKey = "goals" | "health" | "preferences" | "account" | "review";
+
+export type IntakeStep = {
+  key: IntakeStepKey;
+  /** Visible label in the stepper. */
+  label: string;
+  /** Optional one-line hint under the label. */
+  hint?: string;
+};
+
+export type IntakeChoice = {
+  value: string;
+  label: string;
+  /** Optional supporting description rendered under the label. */
+  description?: string;
+};
+
+/** A single key→value row inside `<IntakeReviewSummary>`. */
+export type IntakeReviewField = {
+  label: string;
+  /** Stringified value (multi-select joined to comma list at the caller). */
+  value: string;
+};
+
+/** One review section in `<IntakeReviewSummary>` — corresponds to one step. */
+export type IntakeReviewSection = {
+  stepKey: IntakeStepKey;
+  /** Heading for the section. */
+  label: string;
+  /** Where the "Edit" link routes. */
+  editHref: string;
+  fields: IntakeReviewField[];
+};
