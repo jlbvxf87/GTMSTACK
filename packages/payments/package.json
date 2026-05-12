@@ -7,14 +7,18 @@
   "exports": {
     ".": "./src/index.ts",
     "./router": "./src/router.ts",
-    "./stripe": "./src/stripe.ts",
-    "./careplug": "./src/careplug.ts"
+    "./types": "./src/types.ts",
+    "./events": "./src/events.ts",
+    "./mock": "./src/mock.ts",
+    "./adapters/stripe-connect": "./src/adapters/stripe-connect.ts",
+    "./adapters/careplug-pay": "./src/adapters/careplug-pay.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "stripe": "^16.0.0"
+    "stripe": "^16.0.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@gtmstack/config": "workspace:*",

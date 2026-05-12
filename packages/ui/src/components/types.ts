@@ -73,6 +73,17 @@ export type Product = {
   /** URL slug — drives /products/[slug] routing. Required. */
   slug: string;
   name: string;
+  /**
+   * Product tier — drives the payment router (Sprint 5).
+   * `wellness`  → Stripe Connect.
+   * `clinical`  → CarePlug Pay; usually paired with `requiresProviderReview`.
+   */
+  tier: "wellness" | "clinical";
+  /**
+   * Gates checkout. When `true`, customer cannot pay directly — instead lands
+   * on the review-pending page until a licensed provider approves the intake.
+   */
+  requiresProviderReview?: boolean;
   /** Short positioning line above the name. */
   eyebrow?: string;
   /** Single-sentence description for card surface. */

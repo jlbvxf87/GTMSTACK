@@ -73,13 +73,43 @@ export async function submitAccount(formData: FormData): Promise<void> {
 }
 
 /**
- * Final submit — stamp `submittedAt` and redirect to /start/welcome. Sprint 7
- * replaces this with a write into the clinical Supabase project + audit log.
+ * Final submit — stamp `submittedAt`, pick the program that maps to the
+ * customer's primary goal, and route through /api/checkout so the customer
+ * actually pays (or hits the review-pending gate for clinical products).
+ *
+ * Sprint 7 replaces this with a write into the clinical Supabase project +
+ * audit log + a real provider review queue.
  */
 export async function submitReview(): Promise<void> {
   const state = await readIntakeState();
   await writeIntakeState({ ...state, submittedAt: new Date().toISOString() });
-  redirect("/start/welcome");
+
+  const slug = mapGoalToProduct(state.goals?.primaryGoal);
+  const params = new URLSearchParams({
+    slug,
+    mode: "subscription",
+  });
+  if (state.account?.email) params.set("customerEmail", state.account.email);
+
+  redirect(`/api/checkout?${params.toString()}`);
+}
+
+/**
+ * Map the customer's primary intake goal to a Prime Wellness program slug.
+ * Defaults to Daily Greens because it's the foundation product everyone benefits
+ * from. Sprint 6 makes this operator-configurable.
+ */
+function mapGoalToProduct(primaryGoal: string | undefined): string {
+  switch (primaryGoal) {
+    case "sleep":
+      return "sleep-stack";
+    case "recovery":
+      return "recovery-kit";
+    case "energy":
+    case "longevity":
+    default:
+      return "daily-greens";
+  }
 }
 
 /**

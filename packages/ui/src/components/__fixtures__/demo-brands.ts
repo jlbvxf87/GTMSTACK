@@ -99,6 +99,7 @@ export const primeWellness: DemoBrand = {
       id: "daily-greens",
       slug: "daily-greens",
       name: "Daily Greens",
+      tier: "wellness",
       eyebrow: "Daily foundation",
       description:
         "Adaptogenic greens blend with B-complex, magnesium glycinate, and a clinical-dose ashwagandha.",
@@ -112,6 +113,7 @@ export const primeWellness: DemoBrand = {
       id: "sleep-stack",
       slug: "sleep-stack",
       name: "Sleep Stack",
+      tier: "wellness",
       eyebrow: "Recovery evenings",
       description:
         "Glycine, l-theanine, and magnesium threonate for nights that actually restore. Coach check-ins included.",
@@ -224,6 +226,7 @@ export const primeWellness: DemoBrand = {
       id: "recovery-kit",
       slug: "recovery-kit",
       name: "Recovery Kit",
+      tier: "wellness",
       eyebrow: "Training-day support",
       description:
         "Collagen peptides, electrolyte mineral matrix, and a creatine + tart cherry recovery blend.",
@@ -410,6 +413,8 @@ export const apexRx: DemoBrand = {
       id: "hrt-baseline",
       slug: "hormone-baseline",
       name: "Hormone Baseline",
+      tier: "clinical",
+      requiresProviderReview: true,
       eyebrow: "Provider-supervised",
       description:
         "At-home labs + telehealth provider review + monthly fulfillment of an individualized hormone protocol.",
@@ -420,6 +425,8 @@ export const apexRx: DemoBrand = {
       id: "peptide-stack",
       slug: "peptide-performance",
       name: "Peptide Performance",
+      tier: "clinical",
+      requiresProviderReview: true,
       eyebrow: "Recovery + performance",
       description:
         "BPC-157, TB-500, and supporting peptides fulfilled by 503A compounding pharmacy partners.",
@@ -513,6 +520,8 @@ export const apexRx: DemoBrand = {
       id: "longevity",
       slug: "longevity-panel",
       name: "Longevity Panel",
+      tier: "clinical",
+      requiresProviderReview: true,
       eyebrow: "Quarterly diagnostics",
       description:
         "Quarterly comprehensive labs (40+ biomarkers) and a 30-min provider readout.",
@@ -687,6 +696,7 @@ export const ironReserve: DemoBrand = {
       id: "preworkout",
       slug: "pre-lift",
       name: "Pre-Lift",
+      tier: "wellness",
       eyebrow: "Train",
       description: "Citrulline, beta-alanine, caffeine. Clean panel, transparent dosing.",
       price: {
@@ -699,6 +709,7 @@ export const ironReserve: DemoBrand = {
       id: "whey",
       slug: "whey-foundation",
       name: "Whey Foundation",
+      tier: "wellness",
       eyebrow: "Build",
       description: "Grass-fed isolate, 27g per scoop, no artificial sweeteners.",
       price: {
@@ -808,6 +819,7 @@ export const ironReserve: DemoBrand = {
       id: "recovery",
       slug: "post-recovery",
       name: "Post Recovery",
+      tier: "wellness",
       eyebrow: "Repair",
       description: "Creatine + electrolytes + tart cherry. The bottle on every gym bag.",
       price: { subscription: { monthly: { amount: 4900, currency: "USD" } } },

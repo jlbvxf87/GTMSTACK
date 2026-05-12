@@ -56,13 +56,21 @@ export default async function ProductPage({
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   const trustLines = trustLinesByTheme[brand.themeName];
+  const mode = product.price.subscription ? "subscription" : "payment";
+  const checkoutHref = `/api/checkout?slug=${product.slug}&mode=${mode}`;
+  const ctaLabel = product.requiresProviderReview ? "Start intake review" : "Add to program";
 
   return (
     <>
       <SiteHeader brandName={brand.name} links={brand.nav} cta={brand.navCta} />
 
       <main>
-        <ProductHero product={product} trustLines={trustLines} />
+        <ProductHero
+          product={product}
+          trustLines={trustLines}
+          ctaHref={checkoutHref}
+          ctaLabel={ctaLabel}
+        />
 
         {product.longDescription || product.detailSections?.length ? (
           <ProductDetailsBlock

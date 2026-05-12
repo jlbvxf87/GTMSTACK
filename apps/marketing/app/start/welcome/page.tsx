@@ -1,11 +1,34 @@
 import { redirect } from "next/navigation";
-import { IntakeShell, primeWellness } from "@gtmstack/ui";
+import { IntakeShell, primeWellness, findProductBySlug } from "@gtmstack/ui";
 
 import { resetIntake } from "../actions";
 import { INTAKE_STEPS, completedKeys, readIntakeState } from "../state";
 
-export default async function WelcomeStep() {
+/**
+ * /start/welcome
+ *
+ * Two entry paths after Sprint 5:
+ *
+ *   1. Direct checkout success (Stripe redirect) — has `?session_id=...` and
+ *      optional `?slug=...`. Show a confirmation screen for that purchase.
+ *
+ *   2. Intake submission (post-Sprint 4 flow) — no session_id, but cookie has
+ *      `submittedAt`. Show the original intake-style welcome.
+ *
+ * If neither is set, fall through to /start/review.
+ */
+export default async function WelcomeStep({
+  searchParams,
+}: {
+  searchParams?: Promise<{ session_id?: string; slug?: string }>;
+}) {
+  const sp = (await searchParams) ?? {};
   const state = await readIntakeState();
+
+  if (sp.session_id) {
+    return <CheckoutConfirmation sessionId={sp.session_id} slug={sp.slug} />;
+  }
+
   if (!state.submittedAt) redirect("/start/review");
 
   const firstName = state.account?.firstName ?? "there";
@@ -70,6 +93,55 @@ export default async function WelcomeStep() {
               Start a new intake
             </button>
           </form>
+        </div>
+      </div>
+    </IntakeShell>
+  );
+}
+
+function CheckoutConfirmation({
+  sessionId,
+  slug,
+}: {
+  sessionId: string;
+  slug: string | undefined;
+}) {
+  const match = slug ? findProductBySlug(slug) : null;
+  const product = match?.product;
+  const brand = match?.brand ?? null;
+
+  return (
+    <IntakeShell
+      brandName={brand?.name ?? primeWellness.name}
+      steps={INTAKE_STEPS}
+      currentStep="review"
+      completedSteps={["goals", "health", "preferences", "account", "review"]}
+      eyebrow="Order confirmed"
+      headline="You're in. Welcome aboard."
+      subhead={
+        product
+          ? `Your ${product.name} ${product.price.subscription ? "subscription" : "order"} is active. First shipment in 48 hours.`
+          : "Your order is active. First shipment in 48 hours."
+      }
+    >
+      <div className="flex flex-col gap-12">
+        <div className="rounded-card border-card border-border bg-muted p-6">
+          <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
+            Stripe session
+          </p>
+          <p className="mt-stack font-display text-h3 text-foreground break-all">{sessionId}</p>
+          <p className="mt-stack text-body text-muted-foreground">
+            A receipt is on the way. Manage your subscription anytime from the member dashboard.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-inline">
+          <a
+            href="/"
+            className="inline-flex items-center justify-center rounded-button bg-brand px-[var(--px-button)] py-[var(--py-button)] font-body font-[var(--weight-button)] text-brand-foreground transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-[1.05]"
+          >
+            Back to programs
+          </a>
         </div>
       </div>
     </IntakeShell>
