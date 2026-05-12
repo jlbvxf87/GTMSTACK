@@ -1,5 +1,9 @@
-/* Storybook-only base styles. Apps load Tailwind + their own fonts via next/font. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Google Fonts for the three theme typography pairings.
+   In production apps these come from next/font; Storybook uses CDN for simplicity. */
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Anton&family=JetBrains+Mono:wght@400;500&display=swap");
 
 html,
@@ -8,8 +12,4 @@ body,
   margin: 0;
   padding: 0;
   min-height: 100%;
-}
-
-body {
-  font-family: var(--font-body, "Inter", system-ui, sans-serif);
 }
