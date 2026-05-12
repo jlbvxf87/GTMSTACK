@@ -1,0 +1,21 @@
+{
+  "name": "@gtmstack/auth",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@gtmstack/database-core": "workspace:*",
+    "@gtmstack/database-clinical": "workspace:*"
+  },
+  "devDependencies": {
+    "@gtmstack/config": "workspace:*",
+    "typescript": "^5.4.0"
+  }
+}
