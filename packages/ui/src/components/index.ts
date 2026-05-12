@@ -10,6 +10,15 @@ export type { SiteFooterProps } from "./SiteFooter";
 export { FeatureGrid } from "./FeatureGrid";
 export type { FeatureGridProps } from "./FeatureGrid";
 
+export { ProgramDetails } from "./ProgramDetails";
+export type { ProgramDetailsProps } from "./ProgramDetails";
+
+export { SocialProof } from "./SocialProof";
+export type { SocialProofProps } from "./SocialProof";
+
+export { FAQAccordion } from "./FAQAccordion";
+export type { FAQAccordionProps } from "./FAQAccordion";
+
 export type {
   Money,
   Price,
