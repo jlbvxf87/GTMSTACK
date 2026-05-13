@@ -81,8 +81,8 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
               />
             </div>
 
-            {/* Analytics card — top-right corner, compact */}
-            <div className="hidden md:block absolute top-4 right-4 w-[210px] rounded-2xl border border-black/10 bg-white p-4 shadow-2xl">
+            {/* Analytics card — top-left corner, compact */}
+            <div className="hidden md:block absolute top-4 left-4 w-[210px] rounded-2xl border border-black/10 bg-white p-4 shadow-2xl">
               <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-black/50">
                 Net revenue · this month
               </p>
@@ -96,8 +96,8 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
               </div>
             </div>
 
-            {/* Peptide card — bottom-left corner, compact */}
-            <div className="hidden md:block absolute bottom-4 left-4 w-[220px] rounded-2xl border border-black/10 bg-black p-4 text-white shadow-2xl">
+            {/* Peptide card — bottom-right corner, compact */}
+            <div className="hidden md:block absolute bottom-4 right-4 w-[220px] rounded-2xl border border-black/10 bg-black p-4 text-white shadow-2xl">
               <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/60">
                 Featured program
               </p>
