@@ -7,6 +7,8 @@ import type { StorefrontTheme } from "@gtmstack/database-core";
 import {
   getCurrentOperator,
   getCurrentStorefront,
+  getProductSlugsForStorefront,
+  setProductSlugsForStorefront,
   updateOperator,
   upsertStorefront,
 } from "@gtmstack/database-core";
@@ -60,6 +62,9 @@ export async function readOperatorSession(): Promise<OperatorSession | EmptySess
 
   const { operator, organization } = match;
   const storefront = await getCurrentStorefront(client, organization.id);
+  const productSlugs = storefront
+    ? await getProductSlugsForStorefront(client, storefront.id)
+    : [];
 
   return {
     userId: operator.user_id,
@@ -70,6 +75,7 @@ export async function readOperatorSession(): Promise<OperatorSession | EmptySess
     brandVoice: (storefront?.brand_voice ?? undefined) as BrandIdentity | undefined,
     brandName: operator.brand_name ?? organization.name,
     storefrontSlug: operator.storefront_slug ?? storefront?.slug,
+    productSlugs,
     plan: operator.plan,
     stripeAccountId: operator.stripe_account_id ?? undefined,
   };
@@ -129,6 +135,25 @@ export async function writeOperatorSession(
         .update({ vertical: patch.theme } as never)
         .eq("id", match.organization.id);
       if (error) console.error("[operator-session] organizations.vertical write:", error);
+    }
+  }
+
+  // product_listings — catalog step. Persists the operator's product
+  // selection to the storefront's listings table.
+  if (patch.productSlugs !== undefined) {
+    console.log("[operator-session] productSlugs branch:", patch.productSlugs);
+    const storefront = await getCurrentStorefront(client, match.organization.id);
+    if (!storefront) {
+      console.error("[operator-session] productSlugs write skipped — no storefront row found for org", match.organization.id);
+    } else {
+      console.log("[operator-session] writing product_listings to storefront", storefront.id);
+      try {
+        await setProductSlugsForStorefront(client, storefront.id, patch.productSlugs);
+        console.log("[operator-session] product_listings write complete");
+      } catch (err) {
+        console.error("[operator-session] product_listings write threw:", err);
+        throw err;
+      }
     }
   }
 }
