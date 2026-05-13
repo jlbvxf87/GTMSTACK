@@ -26,3 +26,17 @@ export {
 
 export { resolveStorefrontBySlug } from "./queries/operator-lookup";
 export type { StorefrontResolution } from "./queries/operator-lookup";
+
+export {
+  getCurrentCustomer,
+  provisionCustomer,
+  getOrdersForCustomer,
+  getOrdersForOrganization,
+  insertOrder,
+  getSubscriptionsForCustomer,
+  getSubscriptionsForOrganization,
+  insertSubscription,
+  updateSubscriptionStatus,
+  findOrganizationIdBySlug,
+} from "./queries/customers";
+export type { ProvisionCustomerInput } from "./queries/customers";

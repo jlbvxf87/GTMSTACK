@@ -14,7 +14,8 @@
     "./queries/storefronts": "./src/queries/storefronts.ts",
     "./queries/events": "./src/queries/events.ts",
     "./queries/product-listings": "./src/queries/product-listings.ts",
-    "./queries/operator-lookup": "./src/queries/operator-lookup.ts"
+    "./queries/operator-lookup": "./src/queries/operator-lookup.ts",
+    "./queries/customers": "./src/queries/customers.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

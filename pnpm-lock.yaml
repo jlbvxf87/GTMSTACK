@@ -66,6 +66,9 @@ importers:
       '@gtmstack/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
+      '@gtmstack/database-core':
+        specifier: workspace:*
+        version: link:../../packages/database-core
       '@gtmstack/payments':
         specifier: workspace:*
         version: link:../../packages/payments

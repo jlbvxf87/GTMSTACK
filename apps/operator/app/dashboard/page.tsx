@@ -1,15 +1,23 @@
 import { redirect } from "next/navigation";
 import { SiteHeader, demoBrands } from "@gtmstack/ui";
-import { getRecentEvents } from "@gtmstack/database-core";
-import type { EventRow } from "@gtmstack/database-core";
+import {
+  getOrdersForOrganization,
+  getRecentEvents,
+  getSubscriptionsForOrganization,
+} from "@gtmstack/database-core";
+import type {
+  EventRow,
+  OrderRow,
+  SubscriptionRow,
+} from "@gtmstack/database-core";
 
 import { requireOperator } from "../../lib/operator-session";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 
 /**
- * /dashboard — operator's home base. Now reads from real DB (events table)
- * when Supabase is configured. Falls back to empty-state values when the
- * event log is empty (which it always is for brand-new operators).
+ * /dashboard — operator's home base. Reads from real DB tables (orders,
+ * subscriptions, events) when Supabase is configured. All metrics derive
+ * from actual rows; new operators see honest zeros until customers buy.
  */
 export default async function Dashboard() {
   const session = await requireOperator();
@@ -21,11 +29,12 @@ export default async function Dashboard() {
   const catalog = session.theme ? demoBrands[session.theme].products : [];
   const selectedProducts = catalog.filter((p) => products.includes(p.slug));
 
-  // Live event log + derived metrics. All zeros for new operators — that's
-  // honest, not a bug. Sprint 7 starts populating the events table as
-  // customers come through the checkout flow.
-  const events = await loadRecentEvents(session.organizationId);
-  const metrics = deriveMetrics(events, session.plan);
+  // Live reads from DB. Empty arrays for brand-new operators — honest, not
+  // a bug. Populates as customers come through the storefront's checkout.
+  const { events, orders, subscriptions } = await loadDashboardData(
+    session.organizationId,
+  );
+  const metrics = deriveMetrics(subscriptions, orders, session.plan);
 
   return (
     <>
@@ -171,6 +180,27 @@ export default async function Dashboard() {
 // Helpers
 // ---------------------------------------------------------------------------
 
+async function loadDashboardData(
+  organizationId: string,
+): Promise<{ events: EventRow[]; orders: OrderRow[]; subscriptions: SubscriptionRow[] }> {
+  if (!isSupabaseConfigured()) {
+    return { events: [], orders: [], subscriptions: [] };
+  }
+  const client = await supabase();
+  if (!client) return { events: [], orders: [], subscriptions: [] };
+  try {
+    const [events, orders, subscriptions] = await Promise.all([
+      getRecentEvents(client, organizationId, 25),
+      getOrdersForOrganization(client, organizationId, 25),
+      getSubscriptionsForOrganization(client, organizationId),
+    ]);
+    return { events, orders, subscriptions };
+  } catch (err) {
+    console.error("[dashboard] load failed:", err);
+    return { events: [], orders: [], subscriptions: [] };
+  }
+}
+
 async function loadRecentEvents(organizationId: string): Promise<EventRow[]> {
   if (!isSupabaseConfigured()) return [];
   const client = await supabase();
@@ -190,25 +220,29 @@ type Metrics = {
   platformFeeCents: number;
 };
 
-function deriveMetrics(events: EventRow[], plan: string | undefined): Metrics {
-  let mrrCents = 0;
-  let activeSubscribers = 0;
-  let subsLastWeek = 0;
+function deriveMetrics(
+  subscriptions: SubscriptionRow[],
+  orders: OrderRow[],
+  plan: string | undefined,
+): Metrics {
   const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
 
-  for (const e of events) {
-    if (e.type === "order.created" && e.payload?.mode === "subscription") {
-      const amount = Number(e.payload.amount ?? 0);
-      mrrCents += amount;
-      activeSubscribers += 1;
-      const occurredAt = new Date(e.occurred_at).getTime();
-      if (occurredAt >= oneWeekAgo) subsLastWeek += 1;
-    } else if (e.type === "subscription.canceled") {
-      activeSubscribers = Math.max(0, activeSubscribers - 1);
-    }
-  }
+  // MRR + active subscribers come from the subscriptions table.
+  const active = subscriptions.filter((s) => s.status === "active");
+  const mrrCents = active.reduce((acc, s) => acc + s.amount_cents, 0);
+  const activeSubscribers = active.length;
+  const subsLastWeek = active.filter(
+    (s) => new Date(s.created_at).getTime() >= oneWeekAgo,
+  ).length;
 
-  const platformFeeCents = Math.round((mrrCents * platformFeeRatePct(plan)) / 100);
+  // Platform fee paid = % of cumulative revenue from completed orders.
+  const completedRevenueCents = orders
+    .filter((o) => o.status === "active")
+    .reduce((acc, o) => acc + o.amount_cents, 0);
+  const platformFeeCents = Math.round(
+    (completedRevenueCents * platformFeeRatePct(plan)) / 100,
+  );
+
   return { mrrCents, activeSubscribers, subsLastWeek, platformFeeCents };
 }
 

@@ -76,6 +76,41 @@ export type EventRow = {
   occurred_at: string;
 };
 
+export type CustomerRow = {
+  id: string;
+  user_id: string;
+  organization_id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  created_at: string;
+};
+
+export type OrderRow = {
+  id: string;
+  organization_id: string;
+  customer_id: string;
+  product_slug: string;
+  amount_cents: number;
+  currency: string;
+  mode: "subscription" | "payment";
+  stripe_session_id: string | null;
+  status: "active" | "paused" | "canceled" | "refunded" | "failed";
+  created_at: string;
+};
+
+export type SubscriptionRow = {
+  id: string;
+  organization_id: string;
+  customer_id: string;
+  product_slug: string;
+  amount_cents: number;
+  stripe_subscription_id: string | null;
+  status: "active" | "paused" | "canceled";
+  current_period_end: string | null;
+  created_at: string;
+};
+
 // Convenience: the Supabase Database type ssr expects.
 // `__InternalSupabase` is required by @supabase/supabase-js >= 2.50 for type
 // dispatch — leave it as-is.
@@ -124,6 +159,31 @@ export type Database = {
           occurred_at?: string;
         };
         Update: Partial<EventRow>;
+      };
+      customers: {
+        Row: CustomerRow;
+        Insert: Omit<CustomerRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<CustomerRow>;
+      };
+      orders: {
+        Row: OrderRow;
+        Insert: Omit<OrderRow, "id" | "created_at" | "currency"> & {
+          id?: string;
+          created_at?: string;
+          currency?: string;
+        };
+        Update: Partial<OrderRow>;
+      };
+      subscriptions: {
+        Row: SubscriptionRow;
+        Insert: Omit<SubscriptionRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<SubscriptionRow>;
       };
     };
     Views: Record<string, never>;

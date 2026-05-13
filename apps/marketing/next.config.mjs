@@ -6,6 +6,7 @@ const nextConfig = {
     "@gtmstack/ai",
     "@gtmstack/analytics",
     "@gtmstack/payments",
+    "@gtmstack/database-core",
   ],
   experimental: {
     typedRoutes: true,
