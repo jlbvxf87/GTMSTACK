@@ -44,12 +44,19 @@ export type ProvisionOperatorInput = {
  * (service-role) client so it can write across tables and bypass RLS during
  * provisioning. Idempotent on `(owner_user_id)` for the org and `(user_id)`
  * for the operator.
+ *
+ * Typed as `unknown`-then-cast on the admin param because @supabase/ssr's
+ * createServerClient and @supabase/supabase-js's createClient infer
+ * structurally different generic parameters in v2.50+. Both clients accept
+ * `.from(...)` and `.auth.*` calls identically at runtime — the difference
+ * is purely type-system noise.
  */
 export async function provisionOperator(
-  admin: AppSupabaseClient,
+  admin: unknown,
   input: ProvisionOperatorInput,
 ): Promise<{ operator: OperatorRow; organization: OrganizationRow }> {
-  const { data: existingOrg } = await admin
+  const client = admin as AppSupabaseClient;
+  const { data: existingOrg } = await client
     .from("organizations")
     .select("*")
     .eq("owner_user_id", input.userId)
@@ -59,7 +66,7 @@ export async function provisionOperator(
   if (existingOrg) {
     organization = existingOrg as OrganizationRow;
   } else {
-    const { data, error } = await admin
+    const { data, error } = await client
       .from("organizations")
       .insert({
         owner_user_id: input.userId,
@@ -72,7 +79,7 @@ export async function provisionOperator(
     organization = data as OrganizationRow;
   }
 
-  const { data: existingOperator } = await admin
+  const { data: existingOperator } = await client
     .from("operators")
     .select("*")
     .eq("user_id", input.userId)
@@ -82,7 +89,7 @@ export async function provisionOperator(
   if (existingOperator) {
     operator = existingOperator as OperatorRow;
   } else {
-    const { data, error } = await admin
+    const { data, error } = await client
       .from("operators")
       .insert({
         user_id: input.userId,

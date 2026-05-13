@@ -25,16 +25,19 @@ export async function getRecentEvents(
  * Insert an event. Uses the admin client because webhook receivers and
  * background jobs need to write events even when there's no authenticated
  * user session (and RLS would reject those writes).
+ *
+ * Typed as `unknown` for the admin param — see provisionOperator for rationale.
  */
 export async function insertEvent(
-  admin: AppSupabaseClient,
+  admin: unknown,
   args: {
     organizationId: string | null;
     type: string;
     payload: Record<string, unknown>;
   },
 ): Promise<EventRow | null> {
-  const { data, error } = await admin
+  const client = admin as AppSupabaseClient;
+  const { data, error } = await client
     .from("events")
     .insert({
       organization_id: args.organizationId,
