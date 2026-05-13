@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@gtmstack/ui", "@gtmstack/analytics", "@gtmstack/payments"],
+  transpilePackages: [
+    "@gtmstack/ui",
+    "@gtmstack/ai",
+    "@gtmstack/analytics",
+    "@gtmstack/payments",
+  ],
   experimental: {
     typedRoutes: true,
   },

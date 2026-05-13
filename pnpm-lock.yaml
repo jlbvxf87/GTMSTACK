@@ -60,6 +60,9 @@ importers:
 
   apps/marketing:
     dependencies:
+      '@gtmstack/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
       '@gtmstack/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics

@@ -1,18 +1,15 @@
-import {
-  BrandHero,
-  FAQAccordion,
-  ProgramDetails,
-  SiteFooter,
-  SiteHeader,
-} from "@gtmstack/ui";
+import { FAQAccordion, ProgramDetails, SiteFooter, SiteHeader } from "@gtmstack/ui";
+
+import { HeroWithMockup } from "../../components/HeroWithMockup";
+import { TemplatePreviewGrid } from "../../components/TemplatePreviewGrid";
+import { TryBrandVoice } from "../../components/TryBrandVoice";
+import { StickyCTA } from "../../components/StickyCTA";
 
 /**
- * GTMStack marketing landing — `gtmstack.com` in production, `localhost:3000`
- * in dev. Pitches the platform to potential operators.
+ * GTMStack marketing landing — `gtmstack.com` in prod, `localhost:3000` in dev.
  *
- * Composition uses the universal section library plus inline sections for the
- * pieces that don't yet exist as shared components (operator types grid,
- * template family preview cards, pricing tier cards).
+ * Sprint 6.7 polish: live BrandHero mockup in hero, live mini-previews for
+ * the three template families, inline AI brand-voice demo, sticky CTA.
  */
 export default function GTMStackHome() {
   const operatorAppUrl =
@@ -23,32 +20,29 @@ export default function GTMStackHome() {
       <SiteHeader
         brandName="GTMStack"
         links={[
-          { label: "How it works", href: "#how" },
           { label: "Templates", href: "#templates" },
+          { label: "Try it", href: "#try" },
+          { label: "How it works", href: "#how" },
           { label: "Pricing", href: "#pricing" },
-          { label: "FAQ", href: "#faq" },
         ]}
         cta={{ label: "Start your stack", href: `${operatorAppUrl}/signup` }}
       />
 
       <main>
-        <BrandHero
-          brand={{ name: "GTMStack" }}
-          eyebrow="Brand · Storefront · AI · Stack"
-          headline="Launch a branded wellness business in hours."
-          subhead="Bring your audience. We run the storefront, payments, AI customer ops, compliant fulfillment, provider network, and analytics. You operate the brand."
-          primaryCta={{ label: "Start your stack", href: `${operatorAppUrl}/signup` }}
-          secondaryCta={{ label: "See it live", href: "/preview/prime-wellness" }}
-        />
+        <HeroWithMockup operatorAppUrl={operatorAppUrl} />
+
+        <ProofStrip />
 
         <OperatorTypesSection />
 
-        <TemplateFamiliesSection />
+        <TemplatePreviewGrid />
+
+        <TryBrandVoice operatorAppUrl={operatorAppUrl} />
 
         <ProgramDetails
           eyebrow="How it works"
           headline="From signup to live storefront in one session."
-          subhead="The platform handles the parts that take six months to build alone. You focus on the audience and the brand."
+          subhead="The platform handles the parts that take six months alone. You focus on the audience and the brand."
           steps={[
             {
               id: "1",
@@ -60,19 +54,19 @@ export default function GTMStackHome() {
               id: "2",
               label: "02",
               title: "Describe your brand",
-              body: "Type a paragraph. Claude generates your tagline, hero copy, FAQ, voice register, and product positioning. Edit anything.",
+              body: "Type a paragraph. Claude generates tagline, hero copy, FAQ, voice register, product positioning. Edit anything.",
             },
             {
               id: "3",
               label: "03",
-              title: "Pick a template + products",
-              body: "Choose Clinical, Wellness, or Community. Pick products from the marketplace. Set prices.",
+              title: "Pick template + products",
+              body: "Clinical, Wellness, or Community. Pick from the marketplace. Set prices.",
             },
             {
               id: "4",
               label: "04",
               title: "Connect Stripe, launch",
-              body: "Stripe Connect handles payouts, KYC, and 1099s. Your storefront goes live on your subdomain. Customers can subscribe within the hour.",
+              body: "Stripe Connect handles payouts, KYC, 1099s. Storefront live on your subdomain in minutes.",
             },
           ]}
         />
@@ -81,20 +75,20 @@ export default function GTMStackHome() {
 
         <FAQAccordion
           eyebrow="Common questions"
-          headline="Everything new operators ask in week one."
-          subhead="More questions? hello@gtmstack.com."
+          headline="Everything operators ask in week one."
+          subhead="More? hello@gtmstack.com."
           items={[
             {
               id: "q1",
               question: "What does GTMStack actually do for me?",
               answer:
-                "We run the parts of a wellness business that take six months and $150k to build alone — storefront, payments, AI customer ops, compliant fulfillment, provider network for regulated products, and analytics. You bring the audience and the brand.",
+                "We run the parts of a wellness business that take six months and $150k to build alone — storefront, payments, AI customer ops, compliant fulfillment, provider network for regulated products, analytics. You bring audience and brand.",
             },
             {
               id: "q2",
               question: "Who pays whom?",
               answer:
-                "Customers pay you directly via Stripe Connect. We never touch your funds. GTMStack collects a small platform fee (4-8% depending on plan) routed by Stripe at the moment of charge. Your bank sees the rest.",
+                "Customers pay you directly via Stripe Connect. GTMStack never touches your funds. We collect a small platform fee (4-8% depending on plan) routed by Stripe at charge time. Your bank sees the rest.",
             },
             {
               id: "q3",
@@ -106,19 +100,19 @@ export default function GTMStackHome() {
               id: "q4",
               question: "How does the AI brand voice work?",
               answer:
-                "You describe your brand in two or three sentences. Anthropic Claude generates a complete identity — tagline, hero copy, FAQ drafts, product positioning, voice register. You edit anything you don't love. Most operators ship after one regeneration.",
+                "Describe your brand in 2-3 sentences. Claude generates a complete identity — tagline, hero copy, FAQ drafts, product positioning, voice register. Edit anything. Most operators ship after one regeneration.",
             },
             {
               id: "q5",
               question: "Can I bring my own products / distributors?",
               answer:
-                "Sprint 7 adds partner-supplied catalogs. Today you list products from our curated marketplace. When you sign a pharmacy or supplement partner, we add their catalog as an adapter file — no platform changes required.",
+                "Sprint 7 adds partner-supplied catalogs. Today you list from our curated marketplace. When you sign a pharmacy or supplement partner, we add their catalog as an adapter file — no platform changes.",
             },
             {
               id: "q6",
               question: "Is there a free tier?",
               answer:
-                "Yes — Starter is free with an 8% platform fee on transactions. Once you're doing meaningful revenue, the paid tiers cut the platform fee significantly. Run the math on your plan page.",
+                "Yes — Starter is free with an 8% platform fee on transactions. Once you're doing meaningful revenue, paid tiers cut the platform fee. Math is on the pricing page.",
             },
           ]}
         />
@@ -131,8 +125,9 @@ export default function GTMStackHome() {
           {
             heading: "Platform",
             links: [
-              { label: "How it works", href: "#how" },
               { label: "Templates", href: "#templates" },
+              { label: "Try it", href: "#try" },
+              { label: "How it works", href: "#how" },
               { label: "Pricing", href: "#pricing" },
               { label: "FAQ", href: "#faq" },
             ],
@@ -163,12 +158,43 @@ export default function GTMStackHome() {
         ]}
         disclaimer="GTMStack is a platform infrastructure provider. Operators are the brand layer; licensed partners handle regulated review, dispensing, and fulfillment where required. Statements on operator storefronts have not been evaluated by the FDA."
       />
+
+      <StickyCTA href={`${operatorAppUrl}/signup`} label="Start your stack" />
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Operator types section
+// Proof strip
+// ---------------------------------------------------------------------------
+
+function ProofStrip() {
+  const items = [
+    { label: "Built on", value: "Stripe Connect" },
+    { label: "Powered by", value: "Anthropic Claude" },
+    { label: "Hosted on", value: "Vercel + Supabase" },
+    { label: "Compliant via", value: "Licensed pharmacy partners" },
+  ];
+  return (
+    <section className="w-full border-y border-border bg-muted text-foreground">
+      <div className="mx-auto max-w-container px-6 py-10 md:px-10">
+        <ul role="list" className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          {items.map((it) => (
+            <li key={it.label} className="flex flex-col">
+              <span className="font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
+                {it.label}
+              </span>
+              <span className="mt-1 font-display text-h3 text-foreground">{it.value}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Operator types
 // ---------------------------------------------------------------------------
 
 function OperatorTypesSection() {
@@ -176,32 +202,32 @@ function OperatorTypesSection() {
     {
       title: "Creators & influencers",
       eyebrow: "Fitness · wellness · longevity · biohacking",
-      body: "Audiences in performance and biohacking want products from people they already trust. Skip the manufacturing and customer-service slog — bring the audience, GTMStack does the rest.",
+      body: "Audiences in performance want products from people they trust. Bring the audience; we run the rest.",
     },
     {
       title: "Wellness coaches & practitioners",
       eyebrow: "Existing client books",
-      body: "Productize your protocols. Members get a branded storefront for the supplements and programs you already recommend. You earn margin instead of referring revenue to Amazon.",
+      body: "Productize your protocols. Members get a branded storefront for what you already recommend. Earn margin, not Amazon's.",
     },
     {
       title: "Med spas & hormone clinics",
       eyebrow: "In-person + direct-ship",
-      body: "Extend your in-person revenue with branded direct-ship products. Provider-supervised peptides and hormones routed to licensed pharmacy partners — your patients never leave your brand.",
+      body: "Extend your in-person revenue with branded direct-ship products. Provider-supervised peptides routed to licensed pharmacy partners.",
     },
     {
       title: "Fitness communities & gyms",
       eyebrow: "Community-led commerce",
-      body: "Monetize your community with branded supplements and protocols. Subscription staples for the people who already wear your logo. Earn from the workflow you've already built.",
+      body: "Monetize the people already wearing your logo. Subscription staples for the room you've already built.",
     },
     {
-      title: "Healthcare providers & clinicians",
+      title: "Healthcare providers",
       eyebrow: "Branded patient programs",
-      body: "Launch branded supplement lines or patient programs without standing up infrastructure. Compliant intake, provider-network routing, audit logs — built in.",
+      body: "Launch branded supplements or patient programs without standing up infrastructure. Compliant intake, audit logs, PHI handling.",
     },
   ];
 
   return (
-    <section className="w-full bg-muted text-foreground">
+    <section className="w-full bg-background text-foreground">
       <div className="mx-auto max-w-container px-6 py-section md:px-10">
         <header className="mb-12 max-w-3xl">
           <p className="mb-stack font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
@@ -211,8 +237,7 @@ function OperatorTypesSection() {
             Five kinds of operator. One platform.
           </h2>
           <p className="mt-stack text-h3 text-muted-foreground">
-            If you have an audience and a point of view in wellness, you can run a real business
-            on GTMStack inside a single afternoon.
+            Audience and point of view? You can run a real business on GTMStack inside an afternoon.
           </p>
         </header>
 
@@ -236,73 +261,6 @@ function OperatorTypesSection() {
 }
 
 // ---------------------------------------------------------------------------
-// Template families
-// ---------------------------------------------------------------------------
-
-function TemplateFamiliesSection() {
-  const families = [
-    {
-      name: "Clinical Performance",
-      eyebrow: "Provider-supervised",
-      body: "Dark backgrounds. Electric accents. Sharp technical typography. For hormone, peptide, and longevity brands that compete on outcomes, not vibes. Pairs with the Clinical plan + partner provider network.",
-      preview: "/preview/prime-wellness",
-    },
-    {
-      name: "Wellness",
-      eyebrow: "Editorial · warm",
-      body: "Cream backgrounds. Sage and terracotta accents. Serif editorial headlines. For clinician-formulated supplement and program brands that compete on trust and care.",
-      preview: "/preview/prime-wellness",
-    },
-    {
-      name: "Community",
-      eyebrow: "Athlete · direct",
-      body: "Bold colors. Condensed type. Dense layouts. For gyms, training communities, and athlete-led brands that compete on transparency and earned results.",
-      preview: "/preview/prime-wellness",
-    },
-  ];
-
-  return (
-    <section id="templates" className="w-full bg-background text-foreground">
-      <div className="mx-auto max-w-container px-6 py-section md:px-10">
-        <header className="mb-12 max-w-3xl">
-          <p className="mb-stack font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-            One codebase, three brand languages
-          </p>
-          <h2 className="font-display text-h1 text-foreground">
-            Templates that feel like different companies built them.
-          </h2>
-          <p className="mt-stack text-h3 text-muted-foreground">
-            We ship the same conversion architecture in three theme families. Pick one in setup;
-            switch at any time. Tokens drive everything — colors, typography, spacing, motion.
-          </p>
-        </header>
-
-        <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {families.map((f) => (
-            <li
-              key={f.name}
-              className="flex h-full flex-col rounded-card border-card border-border bg-background p-6 shadow-card"
-            >
-              <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                {f.eyebrow}
-              </p>
-              <h3 className="mt-stack font-display text-h2 text-foreground">{f.name}</h3>
-              <p className="mt-stack flex-1 text-body text-muted-foreground">{f.body}</p>
-              <a
-                href={f.preview}
-                className="mt-stack inline-flex w-fit items-center font-mono text-small uppercase tracking-[0.16em] text-brand transition-colors duration-DEFAULT ease-themed hover:brightness-[0.85]"
-              >
-                See it live →
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Pricing
 // ---------------------------------------------------------------------------
 
@@ -312,7 +270,7 @@ function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
       name: "Starter",
       price: "Free",
       sub: "8% platform fee",
-      blurb: "Pay only when you sell. Sub-domain only. Solo operator. Full AI brand voice.",
+      blurb: "Pay only when you sell. Sub-domain. Solo operator. Full AI brand voice.",
       cta: "Start free",
     },
     {
@@ -327,14 +285,14 @@ function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
       name: "Pro",
       price: "$499",
       sub: "/mo · 4% platform fee",
-      blurb: "Unlimited team. Priority support. Custom integrations. Lower transaction fee at scale.",
+      blurb: "Unlimited team. Priority support. Custom integrations. Lower fee at scale.",
       cta: "Start Pro",
     },
     {
       name: "Clinical",
       price: "$1,499",
       sub: "/mo · 6% on MSO portion",
-      blurb: "Required for peptides / hormones. Provider network access, intake compliance, audit logs, PHI handling.",
+      blurb: "Peptides / hormones unlocked. Provider network, intake compliance, audit logs, PHI.",
       cta: "Start Clinical",
     },
   ];
@@ -347,7 +305,7 @@ function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
             Pricing
           </p>
           <h2 className="font-display text-h1 text-foreground">
-            Free until it works. Affordable when it does.
+            Free until it works.
           </h2>
           <p className="mt-stack text-h3 text-muted-foreground">
             Higher tiers cut the platform fee. Most operators graduate to Growth in their first
