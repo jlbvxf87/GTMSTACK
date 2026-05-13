@@ -6,19 +6,26 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./server": "./src/server-client.ts",
+    "./browser": "./src/browser-client.ts",
+    "./admin": "./src/admin-client.ts",
     "./types": "./src/types.ts",
-    "./queries/*": "./src/queries/*.ts"
+    "./queries/operators": "./src/queries/operators.ts",
+    "./queries/storefronts": "./src/queries/storefronts.ts",
+    "./queries/events": "./src/queries/events.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "gen:types": "supabase gen types typescript --project-id $SUPABASE_CORE_PROJECT_ID > src/types.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.4.0",
-    "@supabase/supabase-js": "^2.45.0"
+    "@supabase/ssr": "^0.5.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@gtmstack/config": "workspace:*",
+    "@types/node": "^20.0.0",
     "typescript": "^5.4.0"
   }
 }
