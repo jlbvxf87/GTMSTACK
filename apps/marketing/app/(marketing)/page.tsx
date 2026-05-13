@@ -1,75 +1,42 @@
-import { FAQAccordion, ProgramDetails, SiteFooter, SiteHeader } from "@gtmstack/ui";
+import { FAQAccordion, SiteFooter } from "@gtmstack/ui";
 
-import { HeroWithMockup } from "../../components/HeroWithMockup";
+import { GTMHeader } from "../../components/GTMHeader";
+import { GTMHero } from "../../components/GTMHero";
+import { StatsStrip } from "../../components/StatsStrip";
+import { LaunchSteps } from "../../components/LaunchSteps";
 import { TemplatePreviewGrid } from "../../components/TemplatePreviewGrid";
+import { StorefrontShowcase } from "../../components/StorefrontShowcase";
 import { TryBrandVoice } from "../../components/TryBrandVoice";
 import { StickyCTA } from "../../components/StickyCTA";
 
 /**
- * GTMStack marketing landing — `gtmstack.com` in prod, `localhost:3000` in dev.
+ * GTMStack marketing landing — `gtmstack.com` in prod.
  *
- * Sprint 6.7 polish: live BrandHero mockup in hero, live mini-previews for
- * the three template families, inline AI brand-voice demo, sticky CTA.
+ * Sprint 6.8: bold B&W brand direction matching the user's mock. Real
+ * lifestyle photo + step-pyramid logo + dark CTA. Premium typography.
  */
 export default function GTMStackHome() {
   const operatorAppUrl =
     process.env.NEXT_PUBLIC_OPERATOR_URL ?? "http://localhost:3001";
 
   return (
-    <>
-      <SiteHeader
-        brandName="GTMStack"
-        links={[
-          { label: "Templates", href: "#templates" },
-          { label: "Try it", href: "#try" },
-          { label: "How it works", href: "#how" },
-          { label: "Pricing", href: "#pricing" },
-        ]}
-        cta={{ label: "Start your stack", href: `${operatorAppUrl}/signup` }}
-      />
+    <div className="bg-white text-black">
+      <GTMHeader operatorAppUrl={operatorAppUrl} />
 
       <main>
-        <HeroWithMockup operatorAppUrl={operatorAppUrl} />
+        <GTMHero operatorAppUrl={operatorAppUrl} />
 
-        <ProofStrip />
+        <StatsStrip />
+
+        <LaunchSteps />
+
+        <StorefrontShowcase operatorAppUrl={operatorAppUrl} />
 
         <OperatorTypesSection />
 
         <TemplatePreviewGrid />
 
         <TryBrandVoice operatorAppUrl={operatorAppUrl} />
-
-        <ProgramDetails
-          eyebrow="How it works"
-          headline="From signup to live storefront in one session."
-          subhead="The platform handles the parts that take six months alone. You focus on the audience and the brand."
-          steps={[
-            {
-              id: "1",
-              label: "01",
-              title: "Sign up",
-              body: "Email + password. We provision your operator account and organization in the background.",
-            },
-            {
-              id: "2",
-              label: "02",
-              title: "Describe your brand",
-              body: "Type a paragraph. Claude generates tagline, hero copy, FAQ, voice register, product positioning. Edit anything.",
-            },
-            {
-              id: "3",
-              label: "03",
-              title: "Pick template + products",
-              body: "Clinical, Wellness, or Community. Pick from the marketplace. Set prices.",
-            },
-            {
-              id: "4",
-              label: "04",
-              title: "Connect Stripe, launch",
-              body: "Stripe Connect handles payouts, KYC, 1099s. Storefront live on your subdomain in minutes.",
-            },
-          ]}
-        />
 
         <PricingSection operatorAppUrl={operatorAppUrl} />
 
@@ -88,7 +55,7 @@ export default function GTMStackHome() {
               id: "q2",
               question: "Who pays whom?",
               answer:
-                "Customers pay you directly via Stripe Connect. GTMStack never touches your funds. We collect a small platform fee (4-8% depending on plan) routed by Stripe at charge time. Your bank sees the rest.",
+                "Customers pay you directly via Stripe Connect. GTMStack never touches your funds. We collect a small platform fee (4–8% depending on plan) routed by Stripe at charge time. Your bank sees the rest.",
             },
             {
               id: "q3",
@@ -100,19 +67,19 @@ export default function GTMStackHome() {
               id: "q4",
               question: "How does the AI brand voice work?",
               answer:
-                "Describe your brand in 2-3 sentences. Claude generates a complete identity — tagline, hero copy, FAQ drafts, product positioning, voice register. Edit anything. Most operators ship after one regeneration.",
+                "Describe your brand in 2–3 sentences. Claude generates a complete identity — tagline, hero copy, FAQ drafts, product positioning, voice register. Edit anything. Most operators ship after one regeneration.",
             },
             {
               id: "q5",
               question: "Can I bring my own products / distributors?",
               answer:
-                "Sprint 7 adds partner-supplied catalogs. Today you list from our curated marketplace. When you sign a pharmacy or supplement partner, we add their catalog as an adapter file — no platform changes.",
+                "Yes — partner-supplied catalogs slot in as adapter files. Today you list from our curated marketplace; when you sign a pharmacy or supplement partner, their catalog plugs in without platform changes.",
             },
             {
               id: "q6",
               question: "Is there a free tier?",
               answer:
-                "Yes — Starter is free with an 8% platform fee on transactions. Once you're doing meaningful revenue, paid tiers cut the platform fee. Math is on the pricing page.",
+                "Yes — Starter is free with an 8% platform fee on transactions. Once you're doing meaningful revenue, paid tiers cut the platform fee. Math is on the pricing section.",
             },
           ]}
         />
@@ -125,11 +92,10 @@ export default function GTMStackHome() {
           {
             heading: "Platform",
             links: [
-              { label: "Templates", href: "#templates" },
+              { label: "How it works", href: "#platform" },
+              { label: "Examples", href: "#templates" },
               { label: "Try it", href: "#try" },
-              { label: "How it works", href: "#how" },
               { label: "Pricing", href: "#pricing" },
-              { label: "FAQ", href: "#faq" },
             ],
           },
           {
@@ -159,99 +125,67 @@ export default function GTMStackHome() {
         disclaimer="GTMStack is a platform infrastructure provider. Operators are the brand layer; licensed partners handle regulated review, dispensing, and fulfillment where required. Statements on operator storefronts have not been evaluated by the FDA."
       />
 
-      <StickyCTA href={`${operatorAppUrl}/signup`} label="Start your stack" />
-    </>
+      <StickyCTA href={`${operatorAppUrl}/signup`} label="Launch Your Business" />
+    </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Proof strip
-// ---------------------------------------------------------------------------
-
-function ProofStrip() {
-  const items = [
-    { label: "Built on", value: "Stripe Connect" },
-    { label: "Powered by", value: "Anthropic Claude" },
-    { label: "Hosted on", value: "Vercel + Supabase" },
-    { label: "Compliant via", value: "Licensed pharmacy partners" },
-  ];
-  return (
-    <section className="w-full border-y border-border bg-muted text-foreground">
-      <div className="mx-auto max-w-container px-6 py-10 md:px-10">
-        <ul role="list" className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          {items.map((it) => (
-            <li key={it.label} className="flex flex-col">
-              <span className="font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-                {it.label}
-              </span>
-              <span className="mt-1 font-display text-h3 text-foreground">{it.value}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Operator types
+// Operator types (bold B&W styling)
 // ---------------------------------------------------------------------------
 
 function OperatorTypesSection() {
   const types = [
     {
       title: "Creators & influencers",
-      eyebrow: "Fitness · wellness · longevity · biohacking",
+      eyebrow: "Fitness · wellness · longevity",
       body: "Audiences in performance want products from people they trust. Bring the audience; we run the rest.",
     },
     {
-      title: "Wellness coaches & practitioners",
+      title: "Wellness coaches",
       eyebrow: "Existing client books",
-      body: "Productize your protocols. Members get a branded storefront for what you already recommend. Earn margin, not Amazon's.",
+      body: "Productize your protocols. Members get a branded storefront for what you already recommend.",
     },
     {
       title: "Med spas & hormone clinics",
       eyebrow: "In-person + direct-ship",
-      body: "Extend your in-person revenue with branded direct-ship products. Provider-supervised peptides routed to licensed pharmacy partners.",
+      body: "Extend in-person revenue with branded direct-ship products. Provider-supervised peptides via licensed pharmacy partners.",
     },
     {
       title: "Fitness communities & gyms",
       eyebrow: "Community-led commerce",
-      body: "Monetize the people already wearing your logo. Subscription staples for the room you've already built.",
+      body: "Monetize the people already wearing your logo. Subscription staples for the room you've built.",
     },
     {
       title: "Healthcare providers",
       eyebrow: "Branded patient programs",
-      body: "Launch branded supplements or patient programs without standing up infrastructure. Compliant intake, audit logs, PHI handling.",
+      body: "Launch branded supplements or patient programs without standing up infrastructure. Compliance built in.",
     },
   ];
 
   return (
-    <section className="w-full bg-background text-foreground">
+    <section className="w-full bg-white text-black">
       <div className="mx-auto max-w-container px-6 py-section md:px-10">
-        <header className="mb-12 max-w-3xl">
-          <p className="mb-stack font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-            Built for
-          </p>
-          <h2 className="font-display text-h1 text-foreground">
-            Five kinds of operator. One platform.
-          </h2>
-          <p className="mt-stack text-h3 text-muted-foreground">
-            Audience and point of view? You can run a real business on GTMStack inside an afternoon.
-          </p>
-        </header>
+        <p className="font-body text-small font-semibold uppercase tracking-[0.18em] text-black/50">
+          Built for
+        </p>
+        <h2 className="mt-stack font-body text-[clamp(2rem,4vw+1rem,3.5rem)] font-bold leading-tight tracking-tight text-black max-w-3xl">
+          Five kinds of operator. One platform.
+        </h2>
 
-        <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <ul role="list" className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {types.map((t) => (
             <li
               key={t.title}
-              className="rounded-card border-card border-border bg-background p-6 shadow-card"
+              className="rounded-3xl border border-black/10 bg-white p-6 transition-shadow hover:shadow-xl"
             >
-              <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="font-mono text-small uppercase tracking-[0.16em] text-black/50">
                 {t.eyebrow}
               </p>
-              <h3 className="mt-stack font-display text-h3 text-foreground">{t.title}</h3>
-              <p className="mt-stack text-body text-muted-foreground">{t.body}</p>
+              <h3 className="mt-stack font-body text-h3 font-bold tracking-tight text-black">
+                {t.title}
+              </h3>
+              <p className="mt-stack text-body text-black/70">{t.body}</p>
             </li>
           ))}
         </ul>
@@ -261,7 +195,7 @@ function OperatorTypesSection() {
 }
 
 // ---------------------------------------------------------------------------
-// Pricing
+// Pricing (bold B&W styling)
 // ---------------------------------------------------------------------------
 
 function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
@@ -276,7 +210,7 @@ function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
     {
       name: "Growth",
       price: "$199",
-      sub: "/mo · 5% platform fee",
+      sub: "/mo · 5% fee",
       blurb: "Custom domain. Up to 3 team members. Full AI. Real Stripe Connect onboarding.",
       cta: "Start Growth",
       recommended: true,
@@ -284,64 +218,62 @@ function PricingSection({ operatorAppUrl }: { operatorAppUrl: string }) {
     {
       name: "Pro",
       price: "$499",
-      sub: "/mo · 4% platform fee",
+      sub: "/mo · 4% fee",
       blurb: "Unlimited team. Priority support. Custom integrations. Lower fee at scale.",
       cta: "Start Pro",
     },
     {
       name: "Clinical",
       price: "$1,499",
-      sub: "/mo · 6% on MSO portion",
+      sub: "/mo · 6% MSO",
       blurb: "Peptides / hormones unlocked. Provider network, intake compliance, audit logs, PHI.",
       cta: "Start Clinical",
     },
   ];
 
   return (
-    <section id="pricing" className="w-full bg-muted text-foreground">
+    <section id="pricing" className="w-full bg-white text-black">
       <div className="mx-auto max-w-container px-6 py-section md:px-10">
-        <header className="mb-12 max-w-3xl">
-          <p className="mb-stack font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-            Pricing
-          </p>
-          <h2 className="font-display text-h1 text-foreground">
-            Free until it works.
-          </h2>
-          <p className="mt-stack text-h3 text-muted-foreground">
-            Higher tiers cut the platform fee. Most operators graduate to Growth in their first
-            three months.
-          </p>
-        </header>
+        <p className="font-body text-small font-semibold uppercase tracking-[0.18em] text-black/50">
+          Pricing
+        </p>
+        <h2 className="mt-stack font-body text-[clamp(2rem,4vw+1rem,3.5rem)] font-bold leading-tight tracking-tight text-black max-w-3xl">
+          Free until it works.
+        </h2>
+        <p className="mt-stack max-w-2xl text-h3 text-black/70">
+          Higher tiers cut the platform fee. Most operators graduate to Growth in their first
+          three months.
+        </p>
 
-        <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ul role="list" className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p) => (
             <li
               key={p.name}
               className={[
-                "flex h-full flex-col rounded-card border-card bg-background p-6 shadow-card",
-                p.recommended ? "border-brand" : "border-border",
+                "flex h-full flex-col rounded-3xl border bg-white p-6 transition-shadow",
+                p.recommended ? "border-black shadow-2xl" : "border-black/10 hover:shadow-xl",
               ].join(" ")}
             >
               <div className="flex items-baseline justify-between">
-                <h3 className="font-display text-h2 text-foreground">{p.name}</h3>
+                <h3 className="font-body text-h2 font-bold tracking-tight text-black">{p.name}</h3>
                 {p.recommended ? (
-                  <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-small uppercase tracking-[0.16em] text-accent">
+                  <span className="rounded-full bg-black px-2.5 py-0.5 font-mono text-small uppercase tracking-[0.16em] text-white">
                     Popular
                   </span>
                 ) : null}
               </div>
-              <p className="mt-stack font-display text-h1 text-foreground">
+              <p className="mt-stack font-body text-h1 font-bold tracking-tight text-black">
                 {p.price}
-                <span className="text-h3 text-muted-foreground">{p.sub}</span>
+                <span className="text-h3 font-normal text-black/60">{p.sub}</span>
               </p>
-              <p className="mt-stack flex-1 text-body text-muted-foreground">{p.blurb}</p>
+              <p className="mt-stack flex-1 text-body text-black/70">{p.blurb}</p>
               <a
                 href={`${operatorAppUrl}/signup`}
                 className={[
-                  "mt-stack inline-flex items-center justify-center rounded-button px-[var(--px-button)] py-[var(--py-button)] font-body font-[var(--weight-button)] transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-[1.05]",
+                  "mt-stack inline-flex items-center justify-center rounded-full px-5 py-3 font-body font-semibold transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110",
                   p.recommended
-                    ? "bg-brand text-brand-foreground"
-                    : "border border-border bg-background text-foreground hover:bg-muted",
+                    ? "bg-black text-white"
+                    : "border border-black/15 bg-white text-black hover:bg-black/[0.04]",
                 ].join(" ")}
               >
                 {p.cta}
