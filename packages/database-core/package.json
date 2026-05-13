@@ -16,7 +16,8 @@
     "./queries/product-listings": "./src/queries/product-listings.ts",
     "./queries/operator-lookup": "./src/queries/operator-lookup.ts",
     "./queries/customers": "./src/queries/customers.ts",
-    "./queries/intakes": "./src/queries/intakes.ts"
+    "./queries/intakes": "./src/queries/intakes.ts",
+    "./queries/analytics": "./src/queries/analytics.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

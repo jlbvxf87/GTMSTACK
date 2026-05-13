@@ -42,6 +42,7 @@ export default async function Dashboard() {
         brandName="GTMStack"
         links={[
           { label: "Dashboard", href: "/dashboard" },
+          { label: "Analytics", href: "/dashboard/analytics" },
           { label: "Products", href: "/dashboard/products" },
           { label: "Brand", href: "/dashboard/brand" },
           { label: "Payouts", href: "/dashboard/settings/payouts" },

@@ -52,3 +52,12 @@ export {
   provisionProvider,
 } from "./queries/intakes";
 export type { InsertPendingIntakeInput } from "./queries/intakes";
+
+export {
+  getOrdersTimeSeries,
+  getNewCustomersTimeSeries,
+  getMrrTimeSeries,
+  getTopProducts,
+  getChurnSnapshot,
+} from "./queries/analytics";
+export type { DailyPoint, TopProduct, ChurnSnapshot } from "./queries/analytics";

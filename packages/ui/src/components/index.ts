@@ -52,6 +52,18 @@ export type { IntakeChoiceGroupProps } from "./IntakeChoiceGroup";
 export { IntakeReviewSummary } from "./IntakeReviewSummary";
 export type { IntakeReviewSummaryProps } from "./IntakeReviewSummary";
 
+export { Sparkline } from "./Sparkline";
+export type { SparklineProps, SparklinePoint } from "./Sparkline";
+
+export { BarList } from "./BarList";
+export type { BarListProps, BarListItem } from "./BarList";
+
+export { MetricTile } from "./MetricTile";
+export type { MetricTileProps } from "./MetricTile";
+
+export { TrendCard } from "./TrendCard";
+export type { TrendCardProps } from "./TrendCard";
+
 export type {
   Money,
   Price,

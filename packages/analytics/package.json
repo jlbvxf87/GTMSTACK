@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "posthog-js": "^1.155.0",
-    "posthog-node": "^4.2.0"
+    "posthog-node": "^4.2.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@gtmstack/config": "workspace:*",
+    "@types/node": "^20.0.0",
     "typescript": "^5.4.0"
   }
 }
