@@ -1,12 +1,11 @@
 /**
- * GTMStack hero — bold B&W direction matching the user's brand mock.
+ * GTMStack hero — bold B&W premium direction.
  *
- * Left column: oversized sans display headline, supporting subhead, two CTAs,
- * compliance/proof badges.
- *
- * Right column: lifestyle photo of an operator on phone + laptop, with a
- * compact analytics-card overlay (built from data, no static screenshot) and
- * a dark product card overlay using the storefront mock image.
+ * Right column: lifestyle photo at full column width. Two compact overlay
+ * cards float at corners of the photo — analytics card top-right (where the
+ * background is empty, not over the operator's face), peptide card bottom-
+ * left (over the laptop / arms area, not the face). Cards are sized smaller
+ * so they fit the photo cleanly without dominating it.
  */
 export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
   return (
@@ -70,43 +69,48 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
           </div>
         </div>
 
-        {/* Right — operator photo + mockup overlays */}
-        <div className="relative lg:col-span-6">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-black/[0.04]">
-            <img
-              src="/brand/hero-operator.png"
-              alt="Operator running their wellness business from a phone"
-              className="h-full w-full object-cover"
-            />
-          </div>
-
-          {/* Floating analytics card — top right */}
-          <div className="absolute right-0 top-6 hidden w-[280px] -translate-y-2 rounded-2xl border border-black/10 bg-white p-5 shadow-2xl md:block lg:right-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/50">
-              Net revenue · this month
-            </p>
-            <p className="mt-1 font-body text-[34px] font-bold leading-none tracking-tight text-black">
-              $24,560
-            </p>
-            <Sparkline />
-            <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-              <Metric label="New subs" value="412" />
-              <Metric label="Conversations" value="1,246" />
+        {/* Right — full-width photo with compact card overlays */}
+        <div className="lg:col-span-6">
+          <div className="relative">
+            <div className="aspect-[4/5] w-full overflow-hidden rounded-3xl bg-black/[0.04]">
+              <img
+                src="/brand/hero-operator.png"
+                alt="Operator running their wellness business from a phone"
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 25%" }}
+              />
             </div>
-          </div>
 
-          {/* Floating product card — bottom left, peptide aesthetic */}
-          <div className="absolute -bottom-6 left-0 hidden w-[260px] rounded-2xl border border-black/10 bg-black p-5 text-white shadow-2xl md:block lg:-left-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
-              Featured program
-            </p>
-            <p className="mt-1 font-body text-h3 font-bold tracking-tight">Peptide Program</p>
-            <p className="mt-3 text-small text-white/70">
-              Provider-supervised. Compounded by licensed 503A pharmacy partners.
-            </p>
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="font-body text-h2 font-bold">$399</span>
-              <span className="text-small text-white/60">/mo</span>
+            {/* Analytics card — top-right corner, compact */}
+            <div className="hidden md:block absolute top-4 right-4 w-[210px] rounded-2xl border border-black/10 bg-white p-4 shadow-2xl">
+              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-black/50">
+                Net revenue · this month
+              </p>
+              <p className="mt-0.5 font-body text-[26px] font-bold leading-none tracking-tight text-black">
+                $24,560
+              </p>
+              <Sparkline />
+              <div className="mt-3 grid grid-cols-2 gap-1.5 text-center">
+                <Metric label="New subs" value="412" />
+                <Metric label="Conversations" value="1,246" />
+              </div>
+            </div>
+
+            {/* Peptide card — bottom-left corner, compact */}
+            <div className="hidden md:block absolute bottom-4 left-4 w-[220px] rounded-2xl border border-black/10 bg-black p-4 text-white shadow-2xl">
+              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/60">
+                Featured program
+              </p>
+              <p className="mt-0.5 font-body text-h3 font-bold leading-tight tracking-tight">
+                Peptide Program
+              </p>
+              <p className="mt-2 text-[12px] leading-snug text-white/70">
+                Provider-supervised. Compounded by licensed 503A pharmacy partners.
+              </p>
+              <div className="mt-3 flex items-baseline gap-1.5">
+                <span className="font-body text-[26px] font-bold leading-none">$399</span>
+                <span className="text-[12px] text-white/60">/mo</span>
+              </div>
             </div>
           </div>
         </div>
@@ -119,7 +123,13 @@ function Badge({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-        <path d="M5 12l5 5 9-11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M5 12l5 5 9-11"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
       {children}
     </span>
@@ -128,17 +138,18 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-black/[0.04] py-2">
-      <p className="font-body text-body font-bold text-black">{value}</p>
-      <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-black/50">{label}</p>
+    <div className="rounded-md bg-black/[0.04] py-1.5">
+      <p className="font-body text-[13px] font-bold leading-none text-black">{value}</p>
+      <p className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-black/50">
+        {label}
+      </p>
     </div>
   );
 }
 
 function Sparkline() {
-  // Pure SVG mock sparkline — replace with real data when dashboard wires up.
   return (
-    <svg viewBox="0 0 200 50" className="mt-3 h-10 w-full">
+    <svg viewBox="0 0 200 50" className="mt-2 h-7 w-full">
       <defs>
         <linearGradient id="spark" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#000" stopOpacity="0.18" />

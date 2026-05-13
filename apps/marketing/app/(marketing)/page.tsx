@@ -2,6 +2,7 @@ import { FAQAccordion, SiteFooter } from "@gtmstack/ui";
 
 import { GTMHeader } from "../../components/GTMHeader";
 import { GTMHero } from "../../components/GTMHero";
+import { GTMLandingThemeProvider } from "../../components/GTMLandingThemeProvider";
 import { StatsStrip } from "../../components/StatsStrip";
 import { LaunchSteps } from "../../components/LaunchSteps";
 import { TemplatePreviewGrid } from "../../components/TemplatePreviewGrid";
@@ -20,6 +21,7 @@ export default function GTMStackHome() {
     process.env.NEXT_PUBLIC_OPERATOR_URL ?? "http://localhost:3001";
 
   return (
+    <GTMLandingThemeProvider>
     <div className="bg-white text-black">
       <GTMHeader operatorAppUrl={operatorAppUrl} />
 
@@ -127,6 +129,7 @@ export default function GTMStackHome() {
 
       <StickyCTA href={`${operatorAppUrl}/signup`} label="Launch Your Business" />
     </div>
+    </GTMLandingThemeProvider>
   );
 }
 
