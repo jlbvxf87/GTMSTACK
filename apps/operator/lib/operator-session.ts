@@ -120,6 +120,16 @@ export async function writeOperatorSession(
       theme: patch.theme ?? currentStorefront?.theme ?? "wellness",
       brandVoice: patch.brandVoice,
     });
+
+    // Denormalize vertical onto the organization row so dashboard queries
+    // that don't need to join storefronts can read it directly.
+    if (patch.theme) {
+      const { error } = await client
+        .from("organizations")
+        .update({ vertical: patch.theme } as never)
+        .eq("id", match.organization.id);
+      if (error) console.error("[operator-session] organizations.vertical write:", error);
+    }
   }
 }
 
