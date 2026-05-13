@@ -72,7 +72,7 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
         {/* Right — full-width photo with compact card overlays */}
         <div className="lg:col-span-6">
           <div className="relative">
-            <div className="aspect-[4/5] w-full overflow-hidden rounded-3xl bg-black/[0.04]">
+            <div className="aspect-[4/5] w-full overflow-hidden rounded-3xl bg-white">
               <img
                 src="/brand/hero-operator.png"
                 alt="Operator running their wellness business from a phone"
@@ -138,9 +138,9 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md bg-black/[0.04] py-1.5">
+    <div className="border-t border-black py-1.5">
       <p className="font-body text-[13px] font-bold leading-none text-black">{value}</p>
-      <p className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-black/50">
+      <p className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-black">
         {label}
       </p>
     </div>
