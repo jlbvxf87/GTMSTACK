@@ -13,7 +13,8 @@
     "./queries/operators": "./src/queries/operators.ts",
     "./queries/storefronts": "./src/queries/storefronts.ts",
     "./queries/events": "./src/queries/events.ts",
-    "./queries/product-listings": "./src/queries/product-listings.ts"
+    "./queries/product-listings": "./src/queries/product-listings.ts",
+    "./queries/operator-lookup": "./src/queries/operator-lookup.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -240,9 +240,6 @@ importers:
       '@gtmstack/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
-      '@gtmstack/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@gtmstack/database-core':
         specifier: workspace:*
         version: link:../../packages/database-core
@@ -252,6 +249,12 @@ importers:
       '@gtmstack/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@supabase/ssr':
+        specifier: ^0.5.0
+        version: 0.5.2(@supabase/supabase-js@2.105.4)
+      '@supabase/supabase-js':
+        specifier: ^2.45.0
+        version: 2.105.4
       next:
         specifier: ^14.2.0
         version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -261,6 +264,15 @@ importers:
       react-dom:
         specifier: ^18.3.0
         version: 18.3.1(react@18.3.1)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+      stripe:
+        specifier: ^16.0.0
+        version: 16.12.0
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
     devDependencies:
       '@gtmstack/config':
         specifier: workspace:*
@@ -274,6 +286,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.7(@types/react@18.3.28)
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.0(postcss@8.5.14)
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.14
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.19(tsx@4.21.0)(yaml@2.9.0)

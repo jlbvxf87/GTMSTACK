@@ -23,3 +23,6 @@ export {
   getProductListingsForStorefront,
   setProductSlugsForStorefront,
 } from "./queries/product-listings";
+
+export { resolveStorefrontBySlug } from "./queries/operator-lookup";
+export type { StorefrontResolution } from "./queries/operator-lookup";
