@@ -12,7 +12,8 @@
     "./types": "./src/types.ts",
     "./queries/operators": "./src/queries/operators.ts",
     "./queries/storefronts": "./src/queries/storefronts.ts",
-    "./queries/events": "./src/queries/events.ts"
+    "./queries/events": "./src/queries/events.ts",
+    "./queries/product-listings": "./src/queries/product-listings.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

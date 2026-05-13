@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
 import { SiteHeader, demoBrands } from "@gtmstack/ui";
+import { getRecentEvents } from "@gtmstack/database-core";
+import type { EventRow } from "@gtmstack/database-core";
 
 import { requireOperator } from "../../lib/operator-session";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 
 /**
- * /dashboard — the operator's home base post-onboarding. Sprint 6 V1 reads
- * everything from the cookie + demo fixtures. Sprint 6.5 swaps to Supabase
- * queries via @gtmstack/database-core.
+ * /dashboard — operator's home base. Now reads from real DB (events table)
+ * when Supabase is configured. Falls back to empty-state values when the
+ * event log is empty (which it always is for brand-new operators).
  */
 export default async function Dashboard() {
   const session = await requireOperator();
@@ -17,6 +20,12 @@ export default async function Dashboard() {
   const products = session.productSlugs ?? [];
   const catalog = session.theme ? demoBrands[session.theme].products : [];
   const selectedProducts = catalog.filter((p) => products.includes(p.slug));
+
+  // Live event log + derived metrics. All zeros for new operators — that's
+  // honest, not a bug. Sprint 7 starts populating the events table as
+  // customers come through the checkout flow.
+  const events = await loadRecentEvents(session.organizationId);
+  const metrics = deriveMetrics(events, session.plan);
 
   return (
     <>
@@ -39,40 +48,89 @@ export default async function Dashboard() {
           <h1 className="mt-stack font-display text-h1 text-foreground">{brand}</h1>
           <p className="mt-stack text-body text-muted-foreground">
             Your storefront is live at{" "}
-            <span className="font-mono text-foreground">{storefrontUrl}</span> (Sprint 6 stub — real DNS
-            wires in Sprint 7).
+            <span className="font-mono text-foreground">{storefrontUrl}</span> (Sprint 6 stub —
+            real DNS wires in Sprint 7).
           </p>
 
           <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
-            <Metric label="This month MRR" value="$0" hint="No subscribers yet" />
-            <Metric label="Active subscribers" value="0" hint="—" />
-            <Metric label="Platform fee paid" value="$0" hint="—" />
+            <Metric
+              label="This month MRR"
+              value={formatUSD(metrics.mrrCents)}
+              hint={
+                metrics.activeSubscribers > 0
+                  ? `${metrics.activeSubscribers} active`
+                  : "No subscribers yet"
+              }
+            />
+            <Metric
+              label="Active subscribers"
+              value={String(metrics.activeSubscribers)}
+              hint={metrics.subsLastWeek > 0 ? `+${metrics.subsLastWeek} this week` : "—"}
+            />
+            <Metric
+              label="Platform fee paid"
+              value={formatUSD(metrics.platformFeeCents)}
+              hint={
+                metrics.platformFeeCents > 0
+                  ? `~${platformFeeRatePct(session.plan)}% of revenue`
+                  : "—"
+              }
+            />
           </div>
 
           <section className="mt-12">
             <h2 className="font-display text-h2 text-foreground">Recent activity</h2>
-            <p className="mt-stack text-body text-muted-foreground">
-              Nothing yet. Once customers come through your storefront, every order, AI
-              conversation, and provider review lands here.
-            </p>
+            {events.length === 0 ? (
+              <p className="mt-stack text-body text-muted-foreground">
+                Nothing yet. Once customers come through your storefront, every order, AI
+                conversation, and provider review lands here.
+              </p>
+            ) : (
+              <ul role="list" className="mt-stack space-y-3">
+                {events.slice(0, 8).map((e) => (
+                  <li
+                    key={e.id}
+                    className="flex items-center justify-between gap-4 rounded-card border-card border-border bg-background p-4 shadow-card"
+                  >
+                    <div>
+                      <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
+                        {e.type}
+                      </p>
+                      <p className="mt-1 text-body text-foreground">
+                        {summarizeEvent(e)}
+                      </p>
+                    </div>
+                    <span className="font-mono text-small text-muted-foreground">
+                      {formatRelative(e.occurred_at)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           <section className="mt-12">
             <h2 className="font-display text-h2 text-foreground">Your products</h2>
-            <ul role="list" className="mt-stack grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {selectedProducts.map((p) => (
-                <li
-                  key={p.slug}
-                  className="rounded-card border-card border-border bg-background p-5 shadow-card"
-                >
-                  <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                    {p.eyebrow ?? p.tier}
-                  </p>
-                  <p className="mt-stack font-display text-h3 text-foreground">{p.name}</p>
-                  <p className="mt-stack text-body text-muted-foreground">{p.description}</p>
-                </li>
-              ))}
-            </ul>
+            {selectedProducts.length === 0 ? (
+              <p className="mt-stack text-body text-muted-foreground">
+                No products listed yet. <a href="/onboarding/catalog" className="underline">Pick from the catalog</a>.
+              </p>
+            ) : (
+              <ul role="list" className="mt-stack grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {selectedProducts.map((p) => (
+                  <li
+                    key={p.slug}
+                    className="rounded-card border-card border-border bg-background p-5 shadow-card"
+                  >
+                    <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
+                      {p.eyebrow ?? p.tier}
+                    </p>
+                    <p className="mt-stack font-display text-h3 text-foreground">{p.name}</p>
+                    <p className="mt-stack text-body text-muted-foreground">{p.description}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           {session.brandVoice ? (
@@ -107,6 +165,106 @@ export default async function Dashboard() {
       </main>
     </>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+async function loadRecentEvents(organizationId: string): Promise<EventRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const client = await supabase();
+  if (!client) return [];
+  try {
+    return await getRecentEvents(client, organizationId, 25);
+  } catch (err) {
+    console.error("[dashboard] event load failed:", err);
+    return [];
+  }
+}
+
+type Metrics = {
+  mrrCents: number;
+  activeSubscribers: number;
+  subsLastWeek: number;
+  platformFeeCents: number;
+};
+
+function deriveMetrics(events: EventRow[], plan: string | undefined): Metrics {
+  let mrrCents = 0;
+  let activeSubscribers = 0;
+  let subsLastWeek = 0;
+  const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+  for (const e of events) {
+    if (e.type === "order.created" && e.payload?.mode === "subscription") {
+      const amount = Number(e.payload.amount ?? 0);
+      mrrCents += amount;
+      activeSubscribers += 1;
+      const occurredAt = new Date(e.occurred_at).getTime();
+      if (occurredAt >= oneWeekAgo) subsLastWeek += 1;
+    } else if (e.type === "subscription.canceled") {
+      activeSubscribers = Math.max(0, activeSubscribers - 1);
+    }
+  }
+
+  const platformFeeCents = Math.round((mrrCents * platformFeeRatePct(plan)) / 100);
+  return { mrrCents, activeSubscribers, subsLastWeek, platformFeeCents };
+}
+
+function platformFeeRatePct(plan: string | undefined): number {
+  switch (plan) {
+    case "starter":
+      return 8;
+    case "pro":
+      return 4;
+    case "clinical":
+      return 6;
+    case "growth":
+    default:
+      return 5;
+  }
+}
+
+function formatUSD(cents: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: cents % 100 === 0 ? 0 : 2,
+  }).format(cents / 100);
+}
+
+function summarizeEvent(e: EventRow): string {
+  switch (e.type) {
+    case "order.created":
+      return `New ${e.payload?.mode === "subscription" ? "subscription" : "order"} · ${e.payload?.productSlug ?? "—"} · ${formatUSD(Number(e.payload?.amount ?? 0))}`;
+    case "subscription.renewed":
+      return `Renewal · ${formatUSD(Number(e.payload?.amount ?? 0))}`;
+    case "subscription.canceled":
+      return `Cancellation`;
+    case "refund.completed":
+      return `Refund · ${formatUSD(Number(e.payload?.amount ?? 0))}`;
+    case "payment.failed":
+      return `Payment failed · ${String(e.payload?.reason ?? "unknown reason")}`;
+    case "intake.pending_review":
+      return `Intake awaiting provider review · ${e.payload?.productSlug ?? "—"}`;
+    case "connect.account_updated":
+      return `Stripe account updated`;
+    default:
+      return e.type;
+  }
+}
+
+function formatRelative(iso: string): string {
+  const ts = new Date(iso).getTime();
+  const diff = Date.now() - ts;
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
 
 function Metric({

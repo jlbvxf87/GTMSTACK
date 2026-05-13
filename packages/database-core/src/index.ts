@@ -17,3 +17,9 @@ export {
 } from "./queries/storefronts";
 
 export { getRecentEvents, insertEvent } from "./queries/events";
+
+export {
+  getProductSlugsForStorefront,
+  getProductListingsForStorefront,
+  setProductSlugsForStorefront,
+} from "./queries/product-listings";
