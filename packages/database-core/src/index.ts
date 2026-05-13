@@ -40,3 +40,15 @@ export {
   findOrganizationIdBySlug,
 } from "./queries/customers";
 export type { ProvisionCustomerInput } from "./queries/customers";
+
+export {
+  insertPendingIntake,
+  listPendingIntakes,
+  getPendingIntake,
+  reviewPendingIntake,
+  listIntakeMessages,
+  insertIntakeMessage,
+  getCurrentProvider,
+  provisionProvider,
+} from "./queries/intakes";
+export type { InsertPendingIntakeInput } from "./queries/intakes";

@@ -6,7 +6,9 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./functions/*": "./src/functions/*.ts"
+    "./client": "./src/client.ts",
+    "./events": "./src/events.ts",
+    "./functions": "./src/functions/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -15,10 +17,12 @@
     "@gtmstack/ai": "workspace:*",
     "@gtmstack/database-core": "workspace:*",
     "@gtmstack/email": "workspace:*",
-    "inngest": "^3.20.0"
+    "inngest": "^3.20.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@gtmstack/config": "workspace:*",
+    "@types/node": "^20.0.0",
     "typescript": "^5.4.0"
   }
 }

@@ -111,6 +111,38 @@ export type SubscriptionRow = {
   created_at: string;
 };
 
+export type ProviderRow = {
+  id: string;
+  user_id: string;
+  email: string;
+  display_name: string | null;
+  licensed_states: string[];
+  status: "active" | "paused" | "offboarded";
+  created_at: string;
+};
+
+export type PendingIntakeRow = {
+  id: string;
+  organization_id: string;
+  customer_email: string;
+  customer_id: string | null;
+  product_slug: string;
+  payload: Record<string, unknown>;
+  status: "pending_review" | "approved" | "declined" | "more_info";
+  reviewed_by_provider_id: string | null;
+  reviewed_at: string | null;
+  decision_notes: string | null;
+  created_at: string;
+};
+
+export type IntakeMessageRow = {
+  id: string;
+  pending_intake_id: string;
+  author: "provider" | "patient" | "system";
+  body: string;
+  created_at: string;
+};
+
 // Convenience: the Supabase Database type ssr expects.
 // `__InternalSupabase` is required by @supabase/supabase-js >= 2.50 for type
 // dispatch — leave it as-is.
@@ -184,6 +216,30 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<SubscriptionRow>;
+      };
+      providers: {
+        Row: ProviderRow;
+        Insert: Omit<ProviderRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<ProviderRow>;
+      };
+      pending_intakes: {
+        Row: PendingIntakeRow;
+        Insert: Omit<PendingIntakeRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<PendingIntakeRow>;
+      };
+      intake_messages: {
+        Row: IntakeMessageRow;
+        Insert: Omit<IntakeMessageRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<IntakeMessageRow>;
       };
     };
     Views: Record<string, never>;

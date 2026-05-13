@@ -1,0 +1,5 @@
+{
+  "extends": "@gtmstack/config/tsconfig/lib.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -69,6 +69,9 @@ importers:
       '@gtmstack/database-core':
         specifier: workspace:*
         version: link:../../packages/database-core
+      '@gtmstack/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       '@gtmstack/payments':
         specifier: workspace:*
         version: link:../../packages/payments
@@ -133,6 +136,9 @@ importers:
       '@gtmstack/database-core':
         specifier: workspace:*
         version: link:../../packages/database-core
+      '@gtmstack/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       '@gtmstack/payments':
         specifier: workspace:*
         version: link:../../packages/payments
@@ -145,6 +151,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.105.4
+      inngest:
+        specifier: ^3.20.0
+        version: 3.54.2(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))(next@14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
       next:
         specifier: ^14.2.0
         version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -200,12 +209,21 @@ importers:
       '@gtmstack/compliance':
         specifier: workspace:*
         version: link:../../packages/compliance
-      '@gtmstack/database-clinical':
+      '@gtmstack/database-core':
         specifier: workspace:*
-        version: link:../../packages/database-clinical
+        version: link:../../packages/database-core
+      '@gtmstack/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       '@gtmstack/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@supabase/ssr':
+        specifier: ^0.4.0
+        version: 0.4.1(@supabase/supabase-js@2.105.4)
+      '@supabase/supabase-js':
+        specifier: ^2.45.0
+        version: 2.105.4
       next:
         specifier: ^14.2.0
         version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -215,6 +233,9 @@ importers:
       react-dom:
         specifier: ^18.3.0
         version: 18.3.1(react@18.3.1)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@gtmstack/config':
         specifier: workspace:*
@@ -228,6 +249,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.7(@types/react@18.3.28)
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.0(postcss@8.5.14)
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.14
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.19(tsx@4.21.0)(yaml@2.9.0)
@@ -463,10 +490,16 @@ importers:
       inngest:
         specifier: ^3.20.0
         version: 3.54.2(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))(next@14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
     devDependencies:
       '@gtmstack/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.40
       typescript:
         specifier: ^5.4.0
         version: 5.9.3

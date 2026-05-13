@@ -2,9 +2,17 @@ import "server-only";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { route as pickRoute, type CheckoutIntent } from "@gtmstack/payments";
+import {
+  createAdminClient,
+  findOrganizationIdBySlug,
+  insertPendingIntake,
+  isSupabaseConfigured,
+} from "@gtmstack/database-core";
+import { JOB_EVENTS, dispatch } from "@gtmstack/jobs";
 
 import { findProduct, toCheckoutProduct } from "../../../lib/find-product";
 import { readOperator } from "../../../lib/operator-context";
+import { readIntakeState } from "../../start/state";
 
 /**
  * POST /api/checkout
@@ -58,6 +66,16 @@ async function handle(input: {
   if (decision.kind === "gate") {
     switch (decision.reason.code) {
       case "requires_provider_review": {
+        // Sprint 7b: persist the intake as a pending_intake row so the
+        // provider portal can pick it up. We only do this on the
+        // requires_provider_review branch — Tier 1 products never hit the
+        // intake review pipeline.
+        await persistPendingIntake({
+          operatorSlug: operator.id,
+          productSlug: input.slug,
+          customerEmail: input.customerEmail,
+        });
+
         const url = new URL("/start/review-pending", input.origin);
         url.searchParams.set("slug", input.slug);
         return NextResponse.redirect(url);
@@ -105,4 +123,57 @@ async function handle(input: {
 function getOrigin(req: NextRequest): string {
   const url = req.nextUrl;
   return `${url.protocol}//${url.host}`;
+}
+
+/**
+ * Persist a clinical-tier intake as a `pending_intakes` row so the provider
+ * portal can pick it up. Best-effort — never throws into the user-facing
+ * checkout redirect. Returns silently when Supabase isn't configured or the
+ * operator hasn't been provisioned yet.
+ */
+async function persistPendingIntake(args: {
+  operatorSlug: string;
+  productSlug: string;
+  customerEmail?: string;
+}): Promise<void> {
+  if (!isSupabaseConfigured()) return;
+  try {
+    const state = await readIntakeState();
+    const email = args.customerEmail ?? state.account?.email;
+    if (!email) {
+      console.warn("[checkout] skipping pending_intake — no customer email yet");
+      return;
+    }
+
+    const admin = createAdminClient();
+    if (!admin) return;
+
+    const organizationId = await findOrganizationIdBySlug(admin, args.operatorSlug);
+    if (!organizationId) {
+      console.warn(
+        "[checkout] skipping pending_intake — operator org not provisioned:",
+        args.operatorSlug,
+      );
+      return;
+    }
+
+    const intake = await insertPendingIntake(admin, {
+      organizationId,
+      customerEmail: email,
+      productSlug: args.productSlug,
+      payload: state as Record<string, unknown>,
+    });
+
+    if (intake) {
+      await dispatch(JOB_EVENTS.INTAKE_SUBMITTED, {
+        organizationId,
+        pendingIntakeId: intake.id,
+        customerEmail: email,
+        productSlug: args.productSlug,
+      });
+    }
+  } catch (err) {
+    // Don't fail the checkout flow over telemetry. Log and continue.
+    console.error("[checkout] pending_intake persist failed:", err);
+  }
 }
