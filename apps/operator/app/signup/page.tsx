@@ -1,15 +1,15 @@
 import { redirect } from "next/navigation";
 import { IntakeField, IntakeShell } from "@gtmstack/ui";
 
-import { writeOperatorSession, readOperatorSession } from "../../lib/operator-session";
+import { readOperatorSession } from "../../lib/operator-session";
 import { intakeStepsForOperator } from "../../lib/onboarding-steps";
+import { signupAction } from "./actions";
 
 /**
- * /signup — minimal signup page for Sprint 6 V1.
+ * /signup — real Supabase Auth signup (email + password + brand name).
  *
- * Cookie-based session: takes email + working brand name, stamps a session,
- * jumps to /onboarding/vertical. No password yet; Sprint 6.5 wires Supabase
- * Auth (email/password OR magic link) with this same UX shape.
+ * After successful signup, a server action provisions org + operator rows
+ * and redirects to /onboarding/vertical.
  */
 export default async function SignupPage({
   searchParams,
@@ -20,9 +20,18 @@ export default async function SignupPage({
   if (session.userId) redirect("/dashboard");
 
   const sp = (await searchParams) ?? {};
-  const error = sp.error
-    ? "Email and brand name are required."
-    : undefined;
+  const error =
+    sp.error === "missing"
+      ? "Fill in every field to continue."
+      : sp.error === "weak_password"
+        ? "Password must be at least 8 characters."
+        : sp.error === "exists"
+          ? "An account with that email already exists. Try logging in."
+          : sp.error === "auth"
+            ? "Sign up failed. Check the address and try again."
+            : sp.error
+              ? "Something went wrong. Try again."
+              : undefined;
 
   return (
     <IntakeShell
@@ -33,7 +42,7 @@ export default async function SignupPage({
       headline="Launch a branded wellness business in hours."
       subhead="Storefront, payments, AI customer ops, compliant fulfillment — wired in. You bring the audience."
     >
-      <form action={signup} className="flex flex-col gap-6">
+      <form action={signupAction} className="flex flex-col gap-6">
         <IntakeField
           name="email"
           label="Your email"
@@ -41,8 +50,17 @@ export default async function SignupPage({
           required
           autoComplete="email"
           placeholder="you@example.com"
-          helperText="We confirm here. Sprint 6.5 wires real auth."
-          error={error}
+        />
+
+        <IntakeField
+          name="password"
+          label="Password"
+          type="text"
+          required
+          autoComplete="new-password"
+          placeholder="At least 8 characters"
+          helperText="Used to log back in later. Sprint 7 adds password reset + magic links."
+          error={error?.includes("Password") ? error : undefined}
         />
 
         <IntakeField
@@ -52,7 +70,16 @@ export default async function SignupPage({
           maxLength={80}
           placeholder="Prime Wellness, ApexRX, Iron Reserve..."
           helperText="The name customers see. You can change this anytime."
+          error={error && !error.includes("Password") ? error : undefined}
         />
+
+        <p className="text-small text-muted-foreground">
+          Already have an account?{" "}
+          <a href="/login" className="underline transition-colors duration-DEFAULT ease-themed hover:text-foreground">
+            Log in
+          </a>
+          .
+        </p>
 
         <div className="mt-4 flex justify-end">
           <button
@@ -65,30 +92,4 @@ export default async function SignupPage({
       </form>
     </IntakeShell>
   );
-}
-
-async function signup(formData: FormData): Promise<void> {
-  "use server";
-  const email = String(formData.get("email") ?? "").trim();
-  const brandName = String(formData.get("brandName") ?? "").trim();
-
-  if (!email || !brandName) {
-    redirect("/signup?error=1");
-  }
-
-  await writeOperatorSession({
-    email,
-    brandName,
-    storefrontSlug: slugify(brandName),
-  });
-
-  redirect("/onboarding/vertical");
-}
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 60);
 }
