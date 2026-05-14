@@ -36,10 +36,41 @@ const mono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://gtmstack.com";
+const ogImage = `${siteUrl}/brand/og-image.png`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "GTMStack — Launch a wellness business in hours",
   description:
     "Branded storefront, payments, subscriptions, AI customer operations, compliant fulfillment, provider network, analytics. Operators bring audience. GTMStack runs everything else.",
+  openGraph: {
+    title: "GTMStack — Launch a wellness business in hours",
+    description:
+      "Branded storefront, payments, AI customer ops + fulfillment. You bring the audience; we run the business.",
+    url: siteUrl,
+    siteName: "GTMStack",
+    type: "website",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "GTMStack — launch your wellness business",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GTMStack — Launch a wellness business in hours",
+    description:
+      "Branded storefront, payments, AI customer ops + fulfillment. You bring the audience; we run the business.",
+    images: [ogImage],
+  },
+  icons: {
+    icon: "/brand/mark.png",
+    apple: "/brand/mark.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
