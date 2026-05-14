@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { BrandIdentity } from "@gtmstack/ai";
 
+import { BrandVoicePhonePreview } from "./BrandVoicePhonePreview";
+
 /**
  * Inline "try the AI brand voice" widget. Lives on the landing page so
  * visitors can taste the marquee feature without signing up. Submits to the
@@ -140,77 +142,24 @@ export function TryBrandVoice({
             </p>
           </form>
 
-          {/* Result */}
-          <div className="flex flex-col gap-4 rounded-card border-card border-border bg-background p-6 shadow-card">
+          {/* Result — phone-frame storefront preview */}
+          <div className="relative flex flex-col gap-6">
             {error ? (
               <p className="text-small text-destructive">Error: {error}</p>
             ) : null}
 
-            {!result && !loading ? (
-              <div className="flex h-full min-h-[300px] flex-col items-center justify-center text-center">
-                <p className="font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-                  Output appears here
-                </p>
-                <p className="mt-stack max-w-prose text-body text-muted-foreground">
-                  Pick a preset above or write your own description, then hit Generate.
-                </p>
-              </div>
-            ) : null}
-
-            {loading ? (
-              <div className="flex h-full min-h-[300px] flex-col items-center justify-center">
-                <p className="font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-                  Generating…
-                </p>
-              </div>
-            ) : null}
+            <BrandVoicePhonePreview
+              brandName="Your Brand"
+              result={result}
+              loading={loading}
+              theme={theme}
+            />
 
             {result ? (
-              <div className="flex flex-col gap-stack">
-                <div>
-                  <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                    Tagline
-                  </p>
-                  <p className="mt-1 font-display text-h3 text-foreground">{result.tagline}</p>
-                </div>
-
-                <div>
-                  <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                    Hero
-                  </p>
-                  <p className="mt-1 font-mono text-small uppercase tracking-[0.18em] text-muted-foreground">
-                    {result.eyebrow}
-                  </p>
-                  <p className="mt-1 font-display text-h2 text-foreground">{result.headline}</p>
-                  <p className="mt-stack text-body text-muted-foreground">{result.subhead}</p>
-                </div>
-
-                <div>
-                  <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                    Voice register
-                  </p>
-                  <p className="mt-1 text-body text-foreground">
-                    {result.voiceRegister.join(" · ")}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="font-mono text-small uppercase tracking-[0.16em] text-muted-foreground">
-                    FAQ drafts
-                  </p>
-                  <ul className="mt-stack space-y-2 text-body text-muted-foreground">
-                    {result.faqDrafts.slice(0, 3).map((f, i) => (
-                      <li key={i}>
-                        <span className="font-medium text-foreground">{f.question}</span> — {f.answer.slice(0, 120)}
-                        {f.answer.length > 120 ? "…" : ""}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
+              <div className="flex justify-center">
                 <a
                   href={`${operatorAppUrl}/signup`}
-                  className="mt-stack inline-flex items-center justify-center self-start rounded-button bg-brand px-[var(--px-button)] py-[var(--py-button)] font-body font-[var(--weight-button)] text-brand-foreground transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-[1.05]"
+                  className="inline-flex items-center justify-center rounded-full bg-black px-7 py-3.5 font-body font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110"
                 >
                   Sign up to save this brand voice →
                 </a>

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { PrimaryCTA } from "./PrimaryCTA";
+
 export type ImageStorySectionProps = {
   id?: string;
   eyebrow?: string;
@@ -68,13 +70,8 @@ export function ImageStorySection({
           </div>
 
           {cta ? (
-            <div className="mt-12 flex justify-center">
-              <a
-                href={cta.href}
-                className="inline-flex items-center justify-center rounded-full bg-black px-7 py-4 font-body font-semibold text-white transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110"
-              >
-                {cta.label}
-              </a>
+            <div className="mt-14 flex justify-center">
+              <PrimaryCTA href={cta.href}>{cta.label}</PrimaryCTA>
             </div>
           ) : null}
         </div>
@@ -104,13 +101,8 @@ export function ImageStorySection({
             </p>
           ) : null}
           {cta ? (
-            <div className="mt-10">
-              <a
-                href={cta.href}
-                className="inline-flex items-center justify-center rounded-full bg-black px-7 py-4 font-body font-semibold text-white transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110"
-              >
-                {cta.label}
-              </a>
+            <div className="mt-12">
+              <PrimaryCTA href={cta.href}>{cta.label}</PrimaryCTA>
             </div>
           ) : null}
         </div>

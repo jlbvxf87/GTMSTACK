@@ -10,17 +10,6 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
       id="platform"
       className="relative w-full overflow-hidden bg-white text-black"
     >
-      {/* Subtle background grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
       <div className="relative mx-auto grid max-w-container grid-cols-1 gap-12 px-6 pt-16 pb-24 md:px-10 md:pt-24 md:pb-28 lg:grid-cols-12 lg:gap-12">
         {/* Left — headline + CTAs */}
         <div className="flex flex-col justify-center lg:col-span-6">
@@ -70,13 +59,32 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
           </div>
         </div>
 
-        {/* Right — full-composed mockup. */}
+        {/* Right — full-composed mockup, floating on the background. */}
         <div className="lg:col-span-6">
-          <img
-            src="/brand/landing-hero.png"
-            alt="A creator running their wellness business — phone storefront, product catalog, in-cart subscription checkout"
-            className="block h-auto w-full"
-          />
+          <div className="relative">
+            {/* Soft decorative blob behind the mockup — radial gradient
+                fades to transparent so it reads as ambient depth, not a
+                second card. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 -z-10"
+              style={{
+                background:
+                  "radial-gradient(60% 50% at 50% 45%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.04) 45%, rgba(0,0,0,0) 75%)",
+                filter: "blur(40px)",
+              }}
+            />
+
+            <img
+              src="/brand/landing-hero.png"
+              alt="A creator running their wellness business — phone storefront, product catalog, in-cart subscription checkout"
+              className="relative block h-auto w-full"
+              style={{
+                filter:
+                  "drop-shadow(0 30px 60px rgba(0,0,0,0.18)) drop-shadow(0 10px 20px rgba(0,0,0,0.08))",
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>

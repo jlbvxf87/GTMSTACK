@@ -7,6 +7,8 @@ import { StatsStrip } from "../../components/StatsStrip";
 import { ImageStorySection } from "../../components/ImageStorySection";
 import { TryBrandVoice } from "../../components/TryBrandVoice";
 import { StickyCTA } from "../../components/StickyCTA";
+import { PricingSimpler } from "../../components/PricingSimpler";
+import { FreeTrialCTA } from "../../components/FreeTrialCTA";
 
 /**
  * GTMStack marketing landing — `gtmstack.com` in prod.
@@ -73,6 +75,9 @@ export default function GTMStackHome() {
             tone="neutral"
           />
 
+          {/* Simpler Solution pricing — Stan-style */}
+          <PricingSimpler operatorAppUrl={operatorAppUrl} />
+
           <FAQAccordion
             eyebrow="Common questions"
             headline="Everything operators ask in week one."
@@ -117,36 +122,8 @@ export default function GTMStackHome() {
             ]}
           />
 
-          {/* Final dark CTA */}
-          <section id="pricing" className="w-full bg-black text-white">
-            <div className="mx-auto max-w-container px-6 py-section md:px-10 md:py-32">
-              <p className="font-body text-small font-semibold uppercase tracking-[0.18em] text-white/60">
-                Your turn
-              </p>
-              <h2 className="mt-stack max-w-3xl font-body text-[clamp(2.5rem,5vw+1rem,5rem)] font-bold leading-[0.98] tracking-tight">
-                Launch the business you've been describing.
-              </h2>
-              <p className="mt-6 max-w-2xl font-body text-h3 text-white/70">
-                Pick a vertical, configure your brand voice, list the products
-                you'll sell, and connect Stripe. You can be taking real orders
-                in under an hour.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <a
-                  href={`${operatorAppUrl}/signup`}
-                  className="inline-flex items-center justify-center rounded-full bg-white px-7 py-4 font-body font-semibold text-black transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-95"
-                >
-                  Start free
-                </a>
-                <a
-                  href="/preview/prime-wellness"
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-7 py-4 font-body font-semibold text-white transition-colors hover:bg-white/[0.06]"
-                >
-                  See a live storefront
-                </a>
-              </div>
-            </div>
-          </section>
+          {/* Final pre-footer CTA — Stan-style 14-day trial */}
+          <FreeTrialCTA operatorAppUrl={operatorAppUrl} />
         </main>
 
         <SiteFooter
@@ -159,6 +136,7 @@ export default function GTMStackHome() {
                 { label: "How it works", href: "#platform" },
                 { label: "Operators", href: "#founders" },
                 { label: "Stories", href: "#testimonials" },
+                { label: "Pricing", href: "#pricing" },
                 { label: "Try it", href: "#try" },
               ],
             },
