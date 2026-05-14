@@ -37,6 +37,14 @@ type PreviewProduct = {
   subtitle: string;
   priceCents: number;
   cadence: "month" | "one-time";
+  /**
+   * If `photo` is set we render a real cropped product photograph; otherwise
+   * we fall back to the SVG packshot using `vessel` + `tone`. The wellness
+   * theme uses real photos cropped from the operator's hero composition; the
+   * other two themes still use SVG until we drop in clinical/community
+   * product photography.
+   */
+  photo?: string;
   vessel: ProductPackshotProps["vessel"];
   tone: ProductPackshotProps["tone"];
   cardTone: { bg: string; text: string; mutedText: string };
@@ -48,12 +56,13 @@ const PRODUCTS_BY_THEME: Record<
 > = {
   wellness: [
     {
-      name: "Daily Greens",
-      subtitle: "Energy · immunity · gut",
-      priceCents: 3900,
+      name: "Performance Stack",
+      subtitle: "Strength · focus · endurance",
+      priceCents: 7900,
       cadence: "month",
+      photo: "/brand/preview-product-1.png",
       vessel: "tub",
-      tone: "cream",
+      tone: "ink",
       cardTone: cardTone("cream"),
     },
     {
@@ -61,6 +70,7 @@ const PRODUCTS_BY_THEME: Record<
       subtitle: "Rest · recover · recharge",
       priceCents: 6900,
       cadence: "month",
+      photo: "/brand/preview-product-2.png",
       vessel: "bottle",
       tone: "ink",
       cardTone: cardTone("ink"),
@@ -68,11 +78,22 @@ const PRODUCTS_BY_THEME: Record<
     {
       name: "Recovery Kit",
       subtitle: "Replenish · restore · perform",
-      priceCents: 9900,
+      priceCents: 12900,
       cadence: "month",
+      photo: "/brand/preview-product-3.png",
       vessel: "bottle",
-      tone: "amber",
+      tone: "ink",
       cardTone: cardTone("cream"),
+    },
+    {
+      name: "Daily Greens",
+      subtitle: "Energy · immunity · gut",
+      priceCents: 4900,
+      cadence: "month",
+      photo: "/brand/preview-product-4.png",
+      vessel: "tub",
+      tone: "cream",
+      cardTone: cardTone("ink"),
     },
   ],
   clinical: [
@@ -166,27 +187,67 @@ export function BrandVoicePhonePreview({
         className="relative w-full max-w-[420px] sm:max-w-[440px]"
         style={{ aspectRatio: "9 / 19.5" }}
       >
-        {/* Phone bezel */}
-        <div className="absolute inset-0 rounded-[2.75rem] bg-black shadow-[0_30px_60px_-15px_rgba(0,0,0,0.45),0_15px_30px_-12px_rgba(0,0,0,0.3)]">
+        {/* Phone bezel — gradient gives a subtle metallic edge instead of
+            flat black, and a faint inner ring suggests the inset where the
+            display sits below the chassis. */}
+        <div
+          className="absolute inset-0 rounded-[2.75rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.45),0_15px_30px_-12px_rgba(0,0,0,0.3)]"
+          style={{
+            background:
+              "linear-gradient(135deg, #1a1a1c 0%, #060607 50%, #1a1a1c 100%)",
+          }}
+        >
+          {/* Glass highlight along the top-left rim */}
           <span
             aria-hidden
-            className="absolute inset-y-10 left-[-2px] w-[2px] rounded-full bg-white/10"
+            className="pointer-events-none absolute inset-0 rounded-[2.75rem]"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 75%, rgba(255,255,255,0.06) 100%)",
+            }}
           />
+
+          {/* Physical side buttons */}
+          {/* Mute switch (top-left) */}
           <span
             aria-hidden
-            className="absolute inset-y-10 right-[-2px] w-[2px] rounded-full bg-white/10"
+            className="absolute left-[-3px] top-[112px] h-[28px] w-[3px] rounded-l-sm bg-[#0a0a0b]"
+          />
+          {/* Volume up */}
+          <span
+            aria-hidden
+            className="absolute left-[-3px] top-[160px] h-[52px] w-[3px] rounded-l-sm bg-[#0a0a0b]"
+          />
+          {/* Volume down */}
+          <span
+            aria-hidden
+            className="absolute left-[-3px] top-[228px] h-[52px] w-[3px] rounded-l-sm bg-[#0a0a0b]"
+          />
+          {/* Power button (right) */}
+          <span
+            aria-hidden
+            className="absolute right-[-3px] top-[176px] h-[76px] w-[3px] rounded-r-sm bg-[#0a0a0b]"
           />
 
-          {/* Screen */}
-          <div className="absolute inset-[10px] overflow-hidden rounded-[2.25rem] bg-white">
-            <div className="pointer-events-none absolute top-2 left-1/2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-black" />
+          {/* Screen — slightly larger inset (8px) so the bezel reads as
+              thinner like a recent iPhone, with an inner ring for depth. */}
+          <div className="absolute inset-[8px] overflow-hidden rounded-[2.4rem] bg-white ring-1 ring-black/40">
+            {/* Dynamic Island — pill with a tiny lens dot, top-center */}
+            <div className="pointer-events-none absolute top-[8px] left-1/2 z-20 flex h-[28px] w-[104px] -translate-x-1/2 items-center justify-end rounded-full bg-black pr-3">
+              <span
+                aria-hidden
+                className="block h-[7px] w-[7px] rounded-full bg-[#0a0a0b] ring-1 ring-[#1c1c1e]"
+              />
+            </div>
 
-            <div className="flex items-center justify-between px-5 pt-[14px] text-[10px] font-semibold text-black">
+            <div className="relative z-10 flex items-center justify-between px-5 pt-[15px] text-[10px] font-semibold text-black">
               <span>9:41</span>
-              <span className="flex items-center gap-1">
-                <span aria-hidden>●●●</span>
-                <span aria-hidden>📶</span>
-                <span aria-hidden>🔋</span>
+              {/* Right-side status icons — drawn rather than emoji for
+                  cross-platform consistency */}
+              <span className="flex items-center gap-1.5">
+                <SignalIcon />
+                <WifiIcon />
+                <BatteryIcon />
               </span>
             </div>
 
@@ -325,33 +386,51 @@ function ScreenContent({
           Programs
         </p>
         <ul role="list" className="mt-1.5 flex flex-col gap-1.5">
-          {products.map((p) => (
-            <li
-              key={p.name}
-              className={`flex items-center gap-2 rounded-xl ${p.cardTone.bg} ${p.cardTone.text} px-2.5 py-1.5`}
-            >
-              <span aria-hidden className="flex h-10 w-8 flex-none items-end justify-center">
-                <ProductPackshot
-                  productName={p.name}
-                  vessel={p.vessel}
-                  tone={p.tone}
-                  size={32}
-                />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[11px] font-semibold">{p.name}</p>
-                <p className={`mt-0 truncate text-[9px] ${p.cardTone.mutedText}`}>
-                  {p.subtitle}
-                </p>
-              </div>
-              <div className="flex flex-none flex-col items-end">
-                <p className="text-[11px] font-bold">${(p.priceCents / 100).toFixed(0)}</p>
-                <p className={`text-[8px] ${p.cardTone.mutedText}`}>
-                  /{p.cadence === "month" ? "mo" : "once"}
-                </p>
-              </div>
-            </li>
-          ))}
+          {products.map((p) => {
+            const isInk = p.cardTone.bg.includes("0E0E10");
+            return (
+              <li
+                key={p.name}
+                className={`flex items-center gap-2.5 rounded-xl ${p.cardTone.bg} ${p.cardTone.text} px-2 py-1.5`}
+              >
+                {p.photo ? (
+                  <span
+                    aria-hidden
+                    className={`flex h-11 w-11 flex-none items-center justify-center overflow-hidden rounded-lg ${
+                      isInk ? "bg-white/[0.04]" : "bg-white"
+                    }`}
+                  >
+                    <img
+                      src={p.photo}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  </span>
+                ) : (
+                  <span aria-hidden className="flex h-10 w-8 flex-none items-end justify-center">
+                    <ProductPackshot
+                      productName={p.name}
+                      vessel={p.vessel}
+                      tone={p.tone}
+                      size={32}
+                    />
+                  </span>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[11px] font-semibold">{p.name}</p>
+                  <p className={`mt-0 truncate text-[9px] ${p.cardTone.mutedText}`}>
+                    {p.subtitle}
+                  </p>
+                </div>
+                <div className="flex flex-none flex-col items-end">
+                  <p className="text-[11px] font-bold">${(p.priceCents / 100).toFixed(0)}</p>
+                  <p className={`text-[8px] ${p.cardTone.mutedText}`}>
+                    /{p.cadence === "month" ? "mo" : "once"}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
@@ -392,5 +471,56 @@ function Skeleton({ w, h }: { w: string; h: string }) {
       className="rounded bg-black/[0.07]"
       style={{ width: w, height: h }}
     />
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Status-bar icons. Drawn rather than emoji so they render consistently
+// across platforms (and stay monochrome to match the bezel aesthetic).
+// ---------------------------------------------------------------------------
+
+function SignalIcon() {
+  return (
+    <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden>
+      <rect x="0" y="6" width="2" height="4" rx="0.5" fill="currentColor" />
+      <rect x="3.5" y="4" width="2" height="6" rx="0.5" fill="currentColor" />
+      <rect x="7" y="2" width="2" height="8" rx="0.5" fill="currentColor" />
+      <rect x="10.5" y="0" width="2" height="10" rx="0.5" fill="currentColor" />
+    </svg>
+  );
+}
+
+function WifiIcon() {
+  return (
+    <svg width="13" height="10" viewBox="0 0 13 10" aria-hidden>
+      <path
+        d="M6.5 0C9.5 0 12 1 13 2.2L11.5 4C11 3.4 9 2.5 6.5 2.5S2 3.4 1.5 4L0 2.2C1 1 3.5 0 6.5 0Z"
+        fill="currentColor"
+      />
+      <path
+        d="M6.5 3.5C8.5 3.5 10 4.2 10.7 5L9.3 6.5C9 6 8 5.5 6.5 5.5S4 6 3.7 6.5L2.3 5C3 4.2 4.5 3.5 6.5 3.5Z"
+        fill="currentColor"
+      />
+      <circle cx="6.5" cy="8.5" r="1.3" fill="currentColor" />
+    </svg>
+  );
+}
+
+function BatteryIcon() {
+  return (
+    <svg width="24" height="11" viewBox="0 0 24 11" aria-hidden>
+      <rect
+        x="0.5"
+        y="0.5"
+        width="20"
+        height="10"
+        rx="2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.45"
+      />
+      <rect x="2" y="2" width="17" height="7" rx="1.25" fill="currentColor" />
+      <rect x="21" y="3.5" width="2" height="4" rx="1" fill="currentColor" fillOpacity="0.45" />
+    </svg>
   );
 }
