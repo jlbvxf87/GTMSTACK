@@ -39,9 +39,9 @@ export function GTMHero({ operatorAppUrl }: { operatorAppUrl: string }) {
           <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10 md:gap-4">
             <a
               href={`${operatorAppUrl}/signup`}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3.5 font-body text-base font-semibold tracking-wide text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-7 md:py-4"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3.5 font-body text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-7 md:py-4"
             >
-              GTM TODAY
+              Launch Your Business
             </a>
             <a
               href="#try"

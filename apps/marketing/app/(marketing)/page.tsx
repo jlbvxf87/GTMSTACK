@@ -61,7 +61,7 @@ export default function GTMStackHome() {
             imageSrc="/brand/landing-steps.png"
             imageAlt="Three-step launch — premium storefront, 1-tap subscription checkout, full stack connected end-to-end"
             tone="white"
-            cta={{ label: "GTM TODAY", href: `${operatorAppUrl}/signup` }}
+            cta={{ label: "Launch your business", href: `${operatorAppUrl}/signup` }}
           />
 
           {/* Try the brand voice — interactive AI demo */}
@@ -167,7 +167,7 @@ export default function GTMStackHome() {
           disclaimer="GTMStack is a platform infrastructure provider. Operators are the brand layer; licensed partners handle regulated review, dispensing, and fulfillment where required. Statements on operator storefronts have not been evaluated by the FDA."
         />
 
-        <StickyCTA href={`${operatorAppUrl}/signup`} label="GTM TODAY" />
+        <StickyCTA href={`${operatorAppUrl}/signup`} label="Start Free" />
       </div>
     </GTMLandingThemeProvider>
   );
