@@ -35,9 +35,9 @@ export function GTMHeader({ operatorAppUrl }: { operatorAppUrl: string }) {
 
         <a
           href={`${operatorAppUrl}/signup`}
-          className="inline-flex items-center justify-center rounded-full bg-black px-5 py-2.5 font-body text-small font-semibold text-white transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-black px-5 py-2.5 font-body text-small font-semibold tracking-wide text-white transition-[transform,filter] duration-DEFAULT ease-themed hover:-translate-y-[1px] hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
-          Launch Your Business
+          GTM TODAY
         </a>
       </div>
     </header>

@@ -42,7 +42,7 @@ export default function GTMStackHome() {
             subhead="Wellness coaches, performance founders, recovery clinics — different brands, same infrastructure underneath. You bring the trust; we run the business."
             imageSrc="/brand/landing-founders.png"
             imageAlt="Two GTMStack-powered storefronts — Sophie Strong (wellness) and Ethan Pace (performance) — running on real operator brands"
-            tone="neutral"
+            tone="white"
           />
 
           {/* Platform feature mosaic — "Not just another link in bio" */}
@@ -60,8 +60,8 @@ export default function GTMStackHome() {
             subhead="Pick your vertical. Configure your brand. Hit launch. The storefront is live, payments route, AI starts drafting customer responses — same day."
             imageSrc="/brand/landing-steps.png"
             imageAlt="Three-step launch — premium storefront, 1-tap subscription checkout, full stack connected end-to-end"
-            tone="neutral"
-            cta={{ label: "Launch your business", href: `${operatorAppUrl}/signup` }}
+            tone="white"
+            cta={{ label: "GTM TODAY", href: `${operatorAppUrl}/signup` }}
           />
 
           {/* Try the brand voice — interactive AI demo */}
@@ -72,7 +72,7 @@ export default function GTMStackHome() {
             id="testimonials"
             imageSrc="/brand/landing-testimonials.png"
             imageAlt="What operators are saying — revenue screenshots, founder quotes, before/after audience monetization"
-            tone="neutral"
+            tone="white"
           />
 
           {/* Simpler Solution pricing — Stan-style */}
@@ -167,7 +167,7 @@ export default function GTMStackHome() {
           disclaimer="GTMStack is a platform infrastructure provider. Operators are the brand layer; licensed partners handle regulated review, dispensing, and fulfillment where required. Statements on operator storefronts have not been evaluated by the FDA."
         />
 
-        <StickyCTA href={`${operatorAppUrl}/signup`} label="Launch Your Business" />
+        <StickyCTA href={`${operatorAppUrl}/signup`} label="GTM TODAY" />
       </div>
     </GTMLandingThemeProvider>
   );

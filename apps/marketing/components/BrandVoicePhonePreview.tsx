@@ -163,7 +163,7 @@ export function BrandVoicePhonePreview({
   return (
     <div className="flex justify-center">
       <div
-        className="relative w-full max-w-[360px]"
+        className="relative w-full max-w-[420px] sm:max-w-[440px]"
         style={{ aspectRatio: "9 / 19.5" }}
       >
         {/* Phone bezel */}
