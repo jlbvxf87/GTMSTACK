@@ -247,9 +247,9 @@ function ScreenContent({
   const products = PRODUCTS_BY_THEME[theme];
 
   return (
-    <div className="scrollbar-hide absolute inset-x-0 top-9 bottom-0 overflow-y-auto">
+    <div className="scrollbar-hide absolute inset-x-0 top-9 bottom-0 flex flex-col overflow-y-auto">
       {/* Brand header */}
-      <header className="flex items-center justify-between px-4 py-2">
+      <header className="flex flex-none items-center justify-between border-b border-black/[0.06] px-4 py-2">
         <p className="font-body text-[10px] font-bold tracking-tight text-black">
           {brandName.toUpperCase()}
         </p>
@@ -258,12 +258,33 @@ function ScreenContent({
         </span>
       </header>
 
-      {/* Hero — compact so the rest fits in-frame */}
-      <section className="px-4 pt-1 pb-3">
-        <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/50">
-          {result.eyebrow || "New from your brand"}
-        </p>
-        <h1 className="mt-1 font-body text-[17px] font-bold leading-[1.05] tracking-tight text-black">
+      {/* Hero photo banner — real lifestyle shot from the brand */}
+      <div className="relative flex-none">
+        <img
+          src="/brand/preview-banner.png"
+          alt=""
+          aria-hidden
+          className="block h-[112px] w-full object-cover"
+        />
+        {/* Gradient veil for legibility */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%)",
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 px-4 pb-2">
+          <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-white/80">
+            {result.eyebrow || "New from your brand"}
+          </p>
+        </div>
+      </div>
+
+      {/* Hero copy */}
+      <section className="flex-none px-4 pt-3 pb-3">
+        <h1 className="font-body text-[17px] font-bold leading-[1.05] tracking-tight text-black">
           {result.headline}
         </h1>
         <p className="mt-1.5 line-clamp-2 text-[10px] leading-snug text-black/60">
@@ -291,7 +312,7 @@ function ScreenContent({
 
       {/* Tagline strip */}
       {result.tagline ? (
-        <section className="border-y border-black/10 bg-black/[0.03] px-4 py-1.5">
+        <section className="flex-none border-y border-black/10 bg-black/[0.03] px-4 py-1.5">
           <p className="line-clamp-1 font-body text-[10px] italic leading-snug text-black/70">
             "{result.tagline}"
           </p>
@@ -299,7 +320,7 @@ function ScreenContent({
       ) : null}
 
       {/* Real products */}
-      <section className="px-4 py-3">
+      <section className="flex-none px-4 py-3">
         <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/40">
           Programs
         </p>
@@ -309,12 +330,12 @@ function ScreenContent({
               key={p.name}
               className={`flex items-center gap-2 rounded-xl ${p.cardTone.bg} ${p.cardTone.text} px-2.5 py-1.5`}
             >
-              <span aria-hidden className="flex h-9 w-7 flex-none items-end justify-center">
+              <span aria-hidden className="flex h-10 w-8 flex-none items-end justify-center">
                 <ProductPackshot
                   productName={p.name}
                   vessel={p.vessel}
                   tone={p.tone}
-                  size={30}
+                  size={32}
                 />
               </span>
               <div className="min-w-0 flex-1">
@@ -334,9 +355,9 @@ function ScreenContent({
         </ul>
       </section>
 
-      {/* FAQ — one item to stay in frame */}
+      {/* FAQ */}
       {result.faqDrafts.length > 0 ? (
-        <section className="border-t border-black/10 px-4 py-3">
+        <section className="flex-none border-t border-black/10 px-4 py-3">
           <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/40">
             FAQ
           </p>
@@ -351,8 +372,9 @@ function ScreenContent({
         </section>
       ) : null}
 
-      {/* Footer */}
-      <footer className="bg-black px-4 py-2.5 text-white">
+      {/* Footer — pushed to the bottom of the screen so empty space never
+          shows below it. mt-auto on flex column does the work. */}
+      <footer className="mt-auto flex-none bg-black px-4 py-2.5 text-white">
         <p className="font-body text-[9px] font-bold tracking-tight">
           {brandName.toUpperCase()}
         </p>
