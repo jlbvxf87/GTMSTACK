@@ -54,14 +54,14 @@ export const metadata: Metadata = {
     images: [
       {
         url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: "GTMStack — launch your wellness business",
+        width: 1122,
+        height: 1402,
+        alt: "Your audience. Your brand. Your business — launched on GTMStack.",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "GTMStack — Launch a wellness business in hours",
     description:
       "Branded storefront, payments, AI customer ops + fulfillment. You bring the audience; we run the business.",
