@@ -47,18 +47,27 @@ export default async function IntakeDetailPage({
 
       <section className="mb-10 rounded-card border border-border bg-card p-6">
         <h2 className="font-display text-h3 text-foreground">Intake responses</h2>
-        <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-          {Object.entries(intake.payload).map(([key, value]) => (
-            <div key={key} className="border-t border-border/60 pt-3">
-              <dt className="text-eyebrow uppercase tracking-wide text-muted-foreground">
-                {key}
-              </dt>
-              <dd className="mt-1 font-body text-body text-foreground">
-                {renderValue(value)}
-              </dd>
-            </div>
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {Object.entries(intake.payload).map(([sectionKey, sectionValue]) => (
+            <section key={sectionKey} className="min-w-0 border-t border-border/60 pt-4">
+              <p className="text-eyebrow uppercase tracking-wide text-muted-foreground">
+                {humanize(sectionKey)}
+              </p>
+              <dl className="mt-3 flex flex-col gap-2">
+                {flattenSection(sectionValue).map(({ label, value }) => (
+                  <div key={label} className="flex flex-col gap-0.5">
+                    <dt className="text-small text-muted-foreground">
+                      {humanize(label)}
+                    </dt>
+                    <dd className="min-w-0 break-words font-body text-body text-foreground">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
           ))}
-        </dl>
+        </div>
       </section>
 
       <section className="mb-10 rounded-card border border-border bg-card p-6">
@@ -152,8 +161,33 @@ function DecisionButton({
 
 function renderValue(v: unknown): string {
   if (v == null) return "—";
-  if (typeof v === "string") return v;
+  if (typeof v === "string") return v.length === 0 ? "—" : v;
   if (typeof v === "number" || typeof v === "boolean") return String(v);
   if (Array.isArray(v)) return v.map(renderValue).join(", ");
-  return JSON.stringify(v);
+  if (typeof v === "object") return JSON.stringify(v);
+  return String(v);
+}
+
+/**
+ * Flatten one section of the intake payload into label/value pairs the UI
+ * can render row-by-row. Sections are typically plain objects keyed by
+ * field name (e.g. `goals` → `{ primaryGoal: "energy" }`). If a section is
+ * itself a primitive or array we wrap it under a synthetic `value` label
+ * so the renderer still has something to show.
+ */
+function flattenSection(section: unknown): { label: string; value: string }[] {
+  if (section == null) return [{ label: "value", value: "—" }];
+  if (typeof section !== "object" || Array.isArray(section)) {
+    return [{ label: "value", value: renderValue(section) }];
+  }
+  return Object.entries(section as Record<string, unknown>).map(([k, v]) => ({
+    label: k,
+    value: renderValue(v),
+  }));
+}
+
+/** Turn `primaryGoal` → `Primary goal`, `sleepQuality` → `Sleep quality`. */
+function humanize(key: string): string {
+  const spaced = key.replace(/([A-Z])/g, " $1").replace(/_/g, " ").trim();
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase();
 }

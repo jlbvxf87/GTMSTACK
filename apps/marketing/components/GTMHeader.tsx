@@ -1,5 +1,5 @@
 /**
- * GTMStack landing header — bold B&W, dark CTA, logo mark + wordmark.
+ * GTMStack landing header — bold B&W, dark CTA, user's wordmark logo.
  * Replaces the generic SiteHeader on the marketing landing only; the
  * Prime Wellness preview + product pages still use SiteHeader.
  */
@@ -7,17 +7,23 @@ export function GTMHeader({ operatorAppUrl }: { operatorAppUrl: string }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-black/10 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-container items-center justify-between gap-inline px-6 py-4 md:px-10">
-        <a href="/" className="flex items-center gap-3" aria-label="GTMStack home">
-          <img src="/brand/mark.png" alt="" className="h-8 w-8" />
-          <span className="font-body text-h3 font-bold tracking-tight text-black">GTMSTACK</span>
+        <a href="/" className="flex items-center" aria-label="GTMStack home">
+          <img
+            src="/brand/logo-wordmark.png"
+            alt="GTMStack"
+            className="h-9 w-auto md:h-10"
+          />
         </a>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           <a href="#platform" className="font-body text-body text-black/70 transition-colors hover:text-black">
             Platform
           </a>
-          <a href="#templates" className="font-body text-body text-black/70 transition-colors hover:text-black">
-            Examples
+          <a href="#founders" className="font-body text-body text-black/70 transition-colors hover:text-black">
+            Operators
+          </a>
+          <a href="#testimonials" className="font-body text-body text-black/70 transition-colors hover:text-black">
+            Stories
           </a>
           <a href="#try" className="font-body text-body text-black/70 transition-colors hover:text-black">
             Try it
